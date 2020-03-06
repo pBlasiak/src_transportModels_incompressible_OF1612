@@ -1,0 +1,245 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | Copyright (C) 2011-2015 OpenFOAM Foundation
+     \\/     M anipulation  |
+-------------------------------------------------------------------------------
+License
+    This file is part of OpenFOAM.
+
+    OpenFOAM is free software: you can redistribute it and/or modify it
+    under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    OpenFOAM is distributed in the hope that it will be useful, but WITHOUT
+    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+    for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
+
+\*---------------------------------------------------------------------------*/
+
+#include "Helium.H"
+#include "addToRunTimeSelectionTable.H"
+#include "surfaceFields.H"
+
+// * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
+
+namespace Foam
+{
+namespace viscosityModels
+{
+    defineTypeNameAndDebug(Helium, 0);
+
+    addToRunTimeSelectionTable
+    (
+        viscosityModel,
+        Helium,
+        dictionary
+    );
+}
+}
+
+
+// * * * * * * * * * * * * Private Member Functions  * * * * * * * * * * * * //
+
+Foam::tmp<Foam::volScalarField>
+Foam::viscosityModels::Helium::calcNu() 
+{
+	Info<< "Jestem w calcNu() w Helium. " << endl;
+	calcHeProp(etaHe_, etaHeTable_);
+	calcHeProp(rhoHe_, rhoHeTable_);
+
+    volScalarField nu
+    (
+        IOobject
+        (
+            "nuLocal",
+            U_.time().timeName(),
+            U_.db(),
+            IOobject::NO_READ,
+            IOobject::NO_WRITE
+        ),
+		etaHe_/rhoHe_
+    );
+
+    return max
+    (
+        nuMin_,
+        min
+        (
+            nuMax_,
+			nu
+        )
+    );
+}
+
+void Foam::viscosityModels::Helium::calcHeProp
+(
+	Foam::volScalarField& vsf,
+	const List<scalar>& vsfTable
+)
+{
+	forAll(vsf, celli)
+	{
+		if (T_[celli] < TMin_.value())
+		{
+			vsf[celli] = vsfTable[indexMin_];
+		}
+		else if (T_[celli] > TMax_.value())
+		{
+			vsf[celli] = vsfTable[indexMax_];
+		}
+		else
+		{
+			label index = (T_[celli] - TMin_.value())/dT_;
+			if (index == indexMax_)
+			{
+				vsf[celli] = vsfTable[indexMax_];
+			}
+			else
+			{
+				scalar Ti1 = TMin_.value() + index*dT_;
+				scalar Ti2 = Ti1 + dT_;
+				scalar a = (vsfTable[index + 1] - vsfTable[index])/(Ti2 - Ti1);
+				scalar b = vsfTable[index] - a*Ti1;
+				scalar value = a*T_[celli] + b;
+				vsf[celli] = value;
+			//Info<< "Dla T[" << celli << "] = " << T_[celli] << " => value = " << vsf[celli] << endl;
+			}
+		}
+	}
+
+
+	//forAll(vsf.boundaryField(), patchi)
+	//{
+	//	forAll(vsf.boundaryField()[patchi], facei)
+	//	{
+	//		label faceCelli = vsf.boundaryField()[patchi].patch().faceCells()[facei];
+	//		if (T_[faceCelli] < TMin_.value())
+	//		{
+	//			vsf.boundaryFieldRef()[patchi][facei] = vsfTable[indexMin_];
+	//		}
+	//		else if (T_[faceCelli] > TMax_.value())
+	//		{
+	//			vsf.boundaryFieldRef()[patchi][facei] = vsfTable[indexMax_];
+	//		}
+	//		else
+	//		{
+	//			label index = (T_[faceCelli] - TMin_.value())/dT_;
+	//			if (index == indexMax_)
+	//			{
+	//				vsf.boundaryFieldRef()[patchi][facei] = vsfTable[indexMax_];
+	//			}
+	//			else
+	//			{
+	//				scalar Ti1 = TMin_.value() + index*dT_;
+	//				scalar Ti2 = Ti1 + dT_;
+	//				scalar a = (vsfTable[index + 1] - vsfTable[index])/(Ti2 - Ti1);
+	//				scalar b = vsfTable[index] - a*Ti1;
+	//				scalar value = a*T_[faceCelli] + b;
+	//				vsf.boundaryFieldRef()[patchi][facei] = value;
+	//			}
+	//		}
+	//	}
+	//}
+			//Info<< endl;
+//	forAll(vsf.boundaryField(), patchi)
+//	{
+//		forAll(vsf.boundaryField()[patchi], facei)
+//		{
+//			label faceCelli = vsf.boundaryField()[patchi].patch().faceCells()[facei];
+//			//Info<< "vsf.boundaryFieldRef()[patchi].patch().faceCells()[facei] = " 
+//				//<< vsf.boundaryField()[patchi].patch().faceCells()[facei] << endl;
+//			vsf.boundaryFieldRef()[patchi][facei] = vsf[faceCelli];
+//			Info<< "Dla T[" << facei << "] = " << T_[facei] << " => value = " << vsf.boundaryFieldRef()[patchi][facei] << endl;
+//		}
+//	}
+	forAll(vsf.boundaryField(), patchi)
+	{
+		forAll(vsf.boundaryField()[patchi], facei)
+		{
+			if (T_[facei] < TMin_.value())
+			{
+				vsf.boundaryFieldRef()[patchi][facei] = vsfTable[indexMin_];
+			}
+			else if (T_[facei] > TMax_.value())
+			{
+				vsf.boundaryFieldRef()[patchi][facei] = vsfTable[indexMax_];
+			}
+			else
+			{
+				label index = (T_[facei] - TMin_.value())/dT_;
+				if (index == indexMax_)
+				{
+					vsf.boundaryFieldRef()[patchi][facei] = vsfTable[indexMax_];
+				}
+				else
+				{
+					scalar Ti1 = TMin_.value() + index*dT_;
+					scalar Ti2 = Ti1 + dT_;
+					scalar a = (vsfTable[index + 1] - vsfTable[index])/(Ti2 - Ti1);
+					scalar b = vsfTable[index] - a*Ti1;
+					scalar value = a*T_[facei] + b;
+					vsf.boundaryFieldRef()[patchi][facei] = value;
+			//		Info<< "Dla T[" << facei << "] = " << T_[facei] << " => value = " << vsf.boundaryFieldRef()[patchi][facei] << endl;
+				}
+			}
+		}
+	}
+		//	Info<< endl;
+}
+
+// * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
+
+Foam::viscosityModels::Helium::Helium
+(
+    const word& name,
+    const dictionary& viscosityProperties,
+    const volVectorField& U,
+    const surfaceScalarField& phi
+)
+:
+    HeliumConst(name, viscosityProperties, U, phi),
+    //HeliumCoeffs_(viscosityProperties.subDict(typeName + "Coeffs")),
+	T_(U_.db().lookupObject<volScalarField>("T")),
+    nuMin_("nuMin", dimViscosity, etaHeTable_[indexMin_]/rhoHeTable_[indexMin_]),
+    nuMax_("nuMax", dimViscosity, etaHeTable_[indexMax_]/rhoHeTable_[indexMax_])
+{
+
+}
+
+
+// * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * * //
+
+void Foam::viscosityModels::Helium::correct()
+{
+	Info<< "Helium updates thermal properties..." << endl;
+	nu_ = calcNu();
+	calcHeProp(betaHe_, betaHeTable_);
+	calcHeProp(AGMHe_, AGMHeTable_);
+	calcHeProp(sHe_, sHeTable_);
+	calcHeProp(cpHe_, cpHeTable_);
+	calcHeProp(onebyf_, onebyfTable_);
+}
+
+//bool Foam::viscosityModels::Helium::read
+//(
+//    const dictionary& viscosityProperties
+//)
+//{
+//    viscosityModel::read(viscosityProperties);
+//
+//    //HeliumCoeffs_ = viscosityProperties.subDict(typeName + "Coeffs");
+//
+//    //HeliumCoeffs_.lookup("rhoHe") >> rhoHe_;
+//
+//    return true;
+//}
+
+
+// ************************************************************************* //
