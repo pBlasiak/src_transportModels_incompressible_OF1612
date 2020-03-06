@@ -25,7 +25,8 @@ Class
     Foam::viscosityModels::HeliumConstRho
 
 Description
-     Standard power-law non-Newtonian viscosity model.
+     Helium II model with thermophysical properties dependent on temperature
+	 except density (rho is constant).
 
 SourceFiles
     HeliumConstRho.C

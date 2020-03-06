@@ -25,7 +25,7 @@ Class
     Foam::viscosityModels::Helium
 
 Description
-     Standard power-law non-Newtonian viscosity model.
+     Helium II model with thermophysical properties dependent on temperature.
 
 SourceFiles
     Helium.C

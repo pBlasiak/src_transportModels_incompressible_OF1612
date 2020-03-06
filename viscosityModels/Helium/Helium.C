@@ -109,56 +109,10 @@ void Foam::viscosityModels::Helium::calcHeProp
 				scalar b = vsfTable[index] - a*Ti1;
 				scalar value = a*T_[celli] + b;
 				vsf[celli] = value;
-			//Info<< "Dla T[" << celli << "] = " << T_[celli] << " => value = " << vsf[celli] << endl;
 			}
 		}
 	}
 
-
-	//forAll(vsf.boundaryField(), patchi)
-	//{
-	//	forAll(vsf.boundaryField()[patchi], facei)
-	//	{
-	//		label faceCelli = vsf.boundaryField()[patchi].patch().faceCells()[facei];
-	//		if (T_[faceCelli] < TMin_.value())
-	//		{
-	//			vsf.boundaryFieldRef()[patchi][facei] = vsfTable[indexMin_];
-	//		}
-	//		else if (T_[faceCelli] > TMax_.value())
-	//		{
-	//			vsf.boundaryFieldRef()[patchi][facei] = vsfTable[indexMax_];
-	//		}
-	//		else
-	//		{
-	//			label index = (T_[faceCelli] - TMin_.value())/dT_;
-	//			if (index == indexMax_)
-	//			{
-	//				vsf.boundaryFieldRef()[patchi][facei] = vsfTable[indexMax_];
-	//			}
-	//			else
-	//			{
-	//				scalar Ti1 = TMin_.value() + index*dT_;
-	//				scalar Ti2 = Ti1 + dT_;
-	//				scalar a = (vsfTable[index + 1] - vsfTable[index])/(Ti2 - Ti1);
-	//				scalar b = vsfTable[index] - a*Ti1;
-	//				scalar value = a*T_[faceCelli] + b;
-	//				vsf.boundaryFieldRef()[patchi][facei] = value;
-	//			}
-	//		}
-	//	}
-	//}
-			//Info<< endl;
-//	forAll(vsf.boundaryField(), patchi)
-//	{
-//		forAll(vsf.boundaryField()[patchi], facei)
-//		{
-//			label faceCelli = vsf.boundaryField()[patchi].patch().faceCells()[facei];
-//			//Info<< "vsf.boundaryFieldRef()[patchi].patch().faceCells()[facei] = " 
-//				//<< vsf.boundaryField()[patchi].patch().faceCells()[facei] << endl;
-//			vsf.boundaryFieldRef()[patchi][facei] = vsf[faceCelli];
-//			Info<< "Dla T[" << facei << "] = " << T_[facei] << " => value = " << vsf.boundaryFieldRef()[patchi][facei] << endl;
-//		}
-//	}
 	forAll(vsf.boundaryField(), patchi)
 	{
 		forAll(vsf.boundaryField()[patchi], facei)
@@ -186,12 +140,10 @@ void Foam::viscosityModels::Helium::calcHeProp
 					scalar b = vsfTable[index] - a*Ti1;
 					scalar value = a*T_[facei] + b;
 					vsf.boundaryFieldRef()[patchi][facei] = value;
-			//		Info<< "Dla T[" << facei << "] = " << T_[facei] << " => value = " << vsf.boundaryFieldRef()[patchi][facei] << endl;
 				}
 			}
 		}
 	}
-		//	Info<< endl;
 }
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //

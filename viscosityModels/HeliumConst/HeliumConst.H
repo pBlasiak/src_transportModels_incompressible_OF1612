@@ -25,7 +25,7 @@ Class
     Foam::viscosityModels::HeliumConst
 
 Description
-     Standard power-law non-Newtonian viscosity model.
+     Helium II model with constant thermophysical properties.
 
 SourceFiles
     HeliumConst.C
@@ -209,7 +209,7 @@ public:
 		}
 
 		//- Returns reciprocal of thermal conductivity function for helium based on temperature
-        virtual const volScalarField& k() const override
+        virtual const volScalarField& kappa() const override
 		{
 			return onebyf_;
 		}

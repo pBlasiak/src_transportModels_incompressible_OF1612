@@ -182,7 +182,7 @@ public:
 
 		//- Returns thermal conductivity function 
 //        virtual tmp<volScalarField> onebyf() const = 0;
-        virtual const volScalarField& k() const = 0;
+        virtual const volScalarField& kappa() const = 0;
 		
         //- Returns the density
         virtual const volScalarField& rho() const = 0;

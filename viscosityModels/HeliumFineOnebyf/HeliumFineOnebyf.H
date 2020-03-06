@@ -25,7 +25,8 @@ Class
     Foam::viscosityModels::HeliumFineOnebyf
 
 Description
-     Standard power-law non-Newtonian viscosity model.
+     Helium II model with thermophysical properties dependent on temperature.
+	 Onebyf function is much more accurate than in the Helium model (dT = 0.0001 K).
 
 SourceFiles
     HeliumFineOnebyf.C

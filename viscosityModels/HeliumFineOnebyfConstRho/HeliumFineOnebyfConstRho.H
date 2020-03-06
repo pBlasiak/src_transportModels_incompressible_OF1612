@@ -25,7 +25,9 @@ Class
     Foam::viscosityModels::HeliumFineOnebyfConstRho
 
 Description
-     Standard power-law non-Newtonian viscosity model.
+     Helium II model with thermophysical properties dependent on temperature.
+	 Only density is constant (rho = const).
+	 Onebyf function is much more accurate than in the Helium model (dT = 0.0001 K).
 
 SourceFiles
     HeliumFineOnebyfConstRho.C

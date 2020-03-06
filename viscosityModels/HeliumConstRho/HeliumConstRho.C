@@ -111,7 +111,6 @@ void Foam::viscosityModels::HeliumConstRho::calcHeProp
 		}
 	}
 
-
 	forAll(vsf.boundaryField(), patchi)
 	{
 		forAll(vsf.boundaryField()[patchi], facei)
@@ -143,50 +142,6 @@ void Foam::viscosityModels::HeliumConstRho::calcHeProp
 			}
 		}
 	}
-	//forAll(T_, celli)
-	//{
-	//	if (T_[celli] < TMin_.value())
-	//	{
-	//		vsf[celli] = vsfTable[indexMin_];
-	//	}
-	//	else if (T_[celli] > TMax_.value())
-	//	{
-	//		vsf[celli] = vsfTable[indexMax_];
-	//	}
-	//	else
-	//	{
-	//		label index = (T_[celli] - TMin_.value())/dT_;
-	//		scalar Ti1 = TMin_.value() + index*dT_;
-	//		scalar Ti2 = Ti1 + dT_;
-	//		scalar a = (vsfTable[index + 1] - vsfTable[index])/(Ti2 - Ti1);
-	//		scalar b = vsfTable[index] - a*Ti1;
-	//		vsf[celli] =  a*T_[celli] + b;
-	//	}
-	//}
-
-	//forAll(T_.boundaryField(), patchi)
-	//{
-	//	forAll(T_.boundaryField()[patchi], i)
-	//	{
-	//		if (T_.boundaryField()[patchi][i] < TMin_.value())
-	//		{
-	//			vsf.boundaryFieldRef()[patchi][i] = vsfTable[indexMin_];
-	//		}
-	//		else if (T_.boundaryField()[patchi][i] > TMax_.value())
-	//		{
-	//			vsf.boundaryFieldRef()[patchi][i] = vsfTable[indexMax_];
-	//		}
-	//		else
-	//		{
-	//			label index = (T_.boundaryField()[patchi][i] - TMin_.value())/dT_;
-	//			scalar Ti1 = TMin_.value() + index*dT_;
-	//			scalar Ti2 = Ti1 + dT_;
-	//			scalar a = (vsfTable[index + 1] - vsfTable[index])/(Ti2 - Ti1);
-	//			scalar b = vsfTable[index] - a*Ti1;
-	//			vsf.boundaryFieldRef()[patchi][i] =  a*T_.boundaryField()[patchi][i] + b;
-	//		}
-	//	}
-	//}
 }
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
