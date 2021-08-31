@@ -22,39 +22,37 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::singlePhaseTransportModel
+    Foam::singlePhaseHeliumTransportModel
 
 Description
-    A simple single-phase transport model based on viscosityModel.
+    A simple single-phase transport model based on HeliumModel.
 
-    Used by the incompressible single-phase solvers like simpleFoam,
-    turbFoam etc.
+    Used by the incompressible single-phase solver buoyantBoussinesqSuperFluidPimpleFoam.
 
 SourceFiles
-    singlePhaseTransportModel.C
+    singlePhaseHeliumTransportModel.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef singlePhaseTransportModel_H
-#define singlePhaseTransportModel_H
+#ifndef singlePhaseHeliumTransportModel_H
+#define singlePhaseHeliumTransportModel_H
 
 #include "incompressible/transportModel/transportModel.H"
 #include "IOdictionary.H"
 #include "autoPtr.H"
-#include "viscosityModel.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 namespace Foam
 {
 
-class viscosityModel;
+class HeliumModel;
 
 /*---------------------------------------------------------------------------*\
-                Class singlePhaseTransportModel Declaration
+                Class singlePhaseHeliumTransportModel Declaration
 \*---------------------------------------------------------------------------*/
 
-class singlePhaseTransportModel
+class singlePhaseHeliumTransportModel
 :
     public IOdictionary,
     public transportModel
@@ -63,15 +61,15 @@ class singlePhaseTransportModel
     // Private Member Functions
 
         //- Disallow copy construct
-        singlePhaseTransportModel(const singlePhaseTransportModel&);
+        singlePhaseHeliumTransportModel(const singlePhaseHeliumTransportModel&);
 
         //- Disallow default bitwise assignment
-        void operator=(const singlePhaseTransportModel&);
+        void operator=(const singlePhaseHeliumTransportModel&);
 
-protected:		
-    // Protected Data
+private:		
+    // Private Data
 
-        autoPtr<viscosityModel> viscosityModelPtr_;
+        autoPtr<HeliumModel> HeliumModelPtr_;
 
 
 
@@ -80,7 +78,7 @@ public:
     // Constructors
 
         //- Construct from components
-        singlePhaseTransportModel
+        singlePhaseHeliumTransportModel
         (
             const volVectorField& U,
             const surfaceScalarField& phi
@@ -88,7 +86,7 @@ public:
 
 
     //- Destructor
-    virtual ~singlePhaseTransportModel();
+    virtual ~singlePhaseHeliumTransportModel();
 
 
     // Member Functions

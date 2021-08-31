@@ -22,30 +22,25 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Namespace
-    Foam::viscosityModels
+    Foam::HeliumModels
 
 Description
-    A namespace for various incompressible viscosityModel implementations.
+    A namespace for various incompressible HeliumModel implementations.
 
 Class
-    Foam::viscosityModel
+    Foam::HeliumModel
 
 Description
-    An abstract base class for incompressible viscosityModels.
-
-    The strain rate is defined by:
-
-        mag(symm(grad(U)))
-
+    An abstract base class for incompressible HeliumModels.
 
 SourceFiles
-    viscosityModel.C
-    viscosityModelNew.C
+    HeliumModel.C
+    HeliumModelNew.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef viscosityModel_H
-#define viscosityModel_H
+#ifndef HeliumModel_H
+#define HeliumModel_H
 
 #include "dictionary.H"
 #include "volFieldsFwd.H"
@@ -59,10 +54,10 @@ namespace Foam
 {
 
 /*---------------------------------------------------------------------------*\
-                Class viscosityModel Declaration
+                Class HeliumModel Declaration
 \*---------------------------------------------------------------------------*/
 
-class viscosityModel
+class HeliumModel
 {
 
 protected:
@@ -70,7 +65,7 @@ protected:
     // Protected data
 
         word name_;
-        dictionary viscosityProperties_;
+        dictionary HeliumProperties_;
 
         const volVectorField& U_;
         const surfaceScalarField& phi_;
@@ -79,16 +74,16 @@ protected:
     // Private Member Functions
 
         //- Disallow copy construct
-        viscosityModel(const viscosityModel&);
+        HeliumModel(const HeliumModel&);
 
         //- Disallow default bitwise assignment
-        void operator=(const viscosityModel&);
+        void operator=(const HeliumModel&);
 
 
 public:
 
     //- Runtime type information
-    TypeName("viscosityModel");
+    TypeName("HeliumModel");
 
 
     // Declare run-time constructor selection table
@@ -96,25 +91,25 @@ public:
         declareRunTimeSelectionTable
         (
             autoPtr,
-            viscosityModel,
+            HeliumModel,
             dictionary,
             (
                 const word& name,
-                const dictionary& viscosityProperties,
+                const dictionary& HeliumProperties,
                 const volVectorField& U,
                 const surfaceScalarField& phi
             ),
-            (name, viscosityProperties, U, phi)
+            (name, HeliumProperties, U, phi)
         );
 
 
     // Selectors
 
         //- Return a reference to the selected viscosity model
-        static autoPtr<viscosityModel> New
+        static autoPtr<HeliumModel> New
         (
             const word& name,
-            const dictionary& viscosityProperties,
+            const dictionary& HeliumProperties,
             const volVectorField& U,
             const surfaceScalarField& phi
         );
@@ -123,30 +118,27 @@ public:
     // Constructors
 
         //- Construct from components
-        viscosityModel
+        HeliumModel
         (
             const word& name,
-            const dictionary& viscosityProperties,
+            const dictionary& HeliumProperties,
             const volVectorField& U,
             const surfaceScalarField& phi
         );
 
 
     //- Destructor
-    virtual ~viscosityModel()
+    virtual ~HeliumModel()
     {}
 
 
     // Member Functions
 
-        //- Return the phase transport properties dictionary
-        const dictionary& viscosityProperties() const
+        //- Return the helium properties dictionary
+        const dictionary& HeliumProperties() const
         {
-            return viscosityProperties_;
+            return HeliumProperties_;
         }
-
-        //- Return the strain rate
-        tmp<volScalarField> strainRate() const;
 
         //- Return the laminar viscosity
         virtual tmp<volScalarField> nu() const = 0;
@@ -158,7 +150,7 @@ public:
         virtual void correct() = 0;
 
         //- Read transportProperties dictionary
-        virtual bool read(const dictionary& viscosityProperties) = 0;
+        virtual bool read(const dictionary& HeliumProperties) = 0;
 
 		//- Returns thermal expansion coefficient 
 //        virtual tmp<volScalarField> beta() const = 0;
@@ -177,14 +169,15 @@ public:
         virtual const volScalarField& eta() const = 0;
 	
 		//- Returns specific heat capacity 
- //       virtual tmp<volScalarField> cp() const = 0;
+//        virtual tmp<volScalarField> cp() const = 0;
         virtual const volScalarField& cp() const = 0;
 
 		//- Returns thermal conductivity function 
-//        virtual tmp<volScalarField> onebyf() const = 0;
+//        virtual tmp<volScalarField> kappa() const = 0;
         virtual const volScalarField& kappa() const = 0;
 		
         //- Returns the density
+        //virtual tmp<volScalarField> rho() const = 0;
         virtual const volScalarField& rho() const = 0;
 };
 

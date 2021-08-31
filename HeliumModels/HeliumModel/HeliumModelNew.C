@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011 OpenFOAM Foundation
+    \\  /    A nd           | Copyright (C) 2011-2015 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -23,49 +23,39 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "viscosityModel.H"
+#include "HeliumModel.H"
 #include "volFields.H"
-#include "fvcGrad.H"
+#include "surfaceFields.H"
 
-// * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-namespace Foam
-{
-    defineTypeNameAndDebug(viscosityModel, 0);
-    defineRunTimeSelectionTable(viscosityModel, dictionary);
-}
-
-
-// * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
-
-Foam::viscosityModel::viscosityModel
+Foam::autoPtr<Foam::HeliumModel> Foam::HeliumModel::New
 (
     const word& name,
-    const dictionary& viscosityProperties,
+    const dictionary& HeliumProperties,
     const volVectorField& U,
     const surfaceScalarField& phi
 )
-:
-    name_(name),
-    viscosityProperties_(viscosityProperties),
-    U_(U),
-    phi_(phi)
-{}
-
-
-// * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * * //
-
-Foam::tmp<Foam::volScalarField> Foam::viscosityModel::strainRate() const
 {
-    return sqrt(2.0)*mag(symm(fvc::grad(U_)));
-}
+    const word modelType(HeliumProperties.lookup("HeliumModel"));
 
+    Info<< "Selecting Helium model " << modelType << endl;
 
-bool Foam::viscosityModel::read(const dictionary& viscosityProperties)
-{
-    viscosityProperties_ = viscosityProperties;
+    dictionaryConstructorTable::iterator cstrIter =
+        dictionaryConstructorTablePtr_->find(modelType);
 
-    return true;
+    if (cstrIter == dictionaryConstructorTablePtr_->end())
+    {
+        FatalErrorInFunction
+            << "Unknown HeliumModel type "
+            << modelType << nl << nl
+            << "Valid HeliumModels are : " << endl
+            << dictionaryConstructorTablePtr_->sortedToc()
+            << exit(FatalError);
+    }
+
+    return autoPtr<HeliumModel>
+        (cstrIter()(name, HeliumProperties, U, phi));
 }
 
 

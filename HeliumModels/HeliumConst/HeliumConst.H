@@ -22,7 +22,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::viscosityModels::HeliumConst
+    Foam::HeliumModels::HeliumConst
 
 Description
      Helium II model with constant thermophysical properties.
@@ -35,7 +35,7 @@ SourceFiles
 #ifndef HeliumConst_H
 #define HeliumConst_H
 
-#include "viscosityModel.H"
+#include "HeliumModel.H"
 #include "dimensionedScalar.H"
 #include "volFields.H"
 
@@ -43,7 +43,7 @@ SourceFiles
 
 namespace Foam
 {
-namespace viscosityModels
+namespace HeliumModels
 {
 
 /*---------------------------------------------------------------------------*\
@@ -55,7 +55,7 @@ class Helium;
 
 class HeliumConst
 :
-    public viscosityModel
+    public HeliumModel
 {
     // Private data
 		//- Maximum index number for thermophysical tables i = 667
@@ -113,7 +113,7 @@ protected:
         //- Entropy
         volScalarField sHe_;
 		
-        //- Dynamic viscosity
+        //- Dynamic Helium
         volScalarField etaHe_;
 		
         //- Specific heat at constant pressure
@@ -125,14 +125,14 @@ protected:
         //- Density of the mixture 
         volScalarField rhoHe_;
 
-        //- Kinematic viscosity
+        //- Kinematic Helium
         volScalarField nu_;
 
 
 
     // Private Member Functions
 
-        //- Calculate and return the laminar viscosity
+        //- Calculate and return the laminar Helium
         tmp<volScalarField> calcNu() ;
 
 		//- Calculates helium thermal property based on mean temperature
@@ -153,7 +153,7 @@ public:
         HeliumConst
         (
             const word& name,
-            const dictionary& viscosityProperties,
+            const dictionary& HeliumProperties,
             const volVectorField& U,
             const surfaceScalarField& phi
         );
@@ -166,13 +166,13 @@ public:
 
     // Member Functions
 
-        //- Return the laminar viscosity
+        //- Return the laminar Helium
         tmp<volScalarField> nu() const override
         {
             return nu_;
         }
 
-        //- Return the laminar viscosity for patch
+        //- Return the laminar Helium for patch
         tmp<scalarField> nu(const label patchi) const override
         {
             return nu_.boundaryField()[patchi];
@@ -196,7 +196,7 @@ public:
 			return sHe_;
 		}
 
-		//- Returns dynamic viscosity for helium based on temperature
+		//- Returns dynamic Helium for helium based on temperature
         virtual const volScalarField& eta() const override
 		{
 			return etaHe_;
@@ -224,17 +224,17 @@ public:
 			return Tlambda_;
 		}
 
-        //- Correct the laminar viscosity and thermal properties of He
+        //- Correct the laminar Helium and thermal properties of He
         virtual void correct() override;
 
         //- Read transportProperties dictionary
-        virtual bool read(const dictionary& viscosityProperties) override;
+        virtual bool read(const dictionary& HeliumProperties) override;
 };
 
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-} // End namespace viscosityModels
+} // End namespace HeliumModels
 } // End namespace Foam
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

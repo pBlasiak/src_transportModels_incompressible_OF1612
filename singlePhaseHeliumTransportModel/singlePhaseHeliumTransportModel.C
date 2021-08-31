@@ -23,14 +23,14 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "singlePhaseTransportModel.H"
+#include "singlePhaseHeliumTransportModel.H"
 #include "viscosityModel.H"
 #include "volFields.H"
 
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::singlePhaseTransportModel::singlePhaseTransportModel
+Foam::singlePhaseHeliumTransportModel::singlePhaseHeliumTransportModel
 (
     const volVectorField& U,
     const surfaceScalarField& phi
@@ -53,33 +53,33 @@ Foam::singlePhaseTransportModel::singlePhaseTransportModel
 
 // * * * * * * * * * * * * * * * * Destructor  * * * * * * * * * * * * * * * //
 
-Foam::singlePhaseTransportModel::~singlePhaseTransportModel()
+Foam::singlePhaseHeliumTransportModel::~singlePhaseHeliumTransportModel()
 {}
 
 
 // * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * * //
 
 Foam::tmp<Foam::volScalarField>
-Foam::singlePhaseTransportModel::nu() const
+Foam::singlePhaseHeliumTransportModel::nu() const
 {
     return viscosityModelPtr_->nu();
 }
 
 
 Foam::tmp<Foam::scalarField>
-Foam::singlePhaseTransportModel::nu(const label patchi) const
+Foam::singlePhaseHeliumTransportModel::nu(const label patchi) const
 {
     return viscosityModelPtr_->nu(patchi);
 }
 
 
-void Foam::singlePhaseTransportModel::correct()
+void Foam::singlePhaseHeliumTransportModel::correct()
 {
     viscosityModelPtr_->correct();
 }
 
 
-bool Foam::singlePhaseTransportModel::read()
+bool Foam::singlePhaseHeliumTransportModel::read()
 {
     if (regIOobject::read())
     {

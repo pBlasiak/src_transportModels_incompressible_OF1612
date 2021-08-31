@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2015 OpenFOAM Foundation
+    \\  /    A nd           | Copyright (C) 2011 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -23,39 +23,43 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "viscosityModel.H"
+#include "HeliumModel.H"
 #include "volFields.H"
-#include "surfaceFields.H"
 
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+// * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
 
-Foam::autoPtr<Foam::viscosityModel> Foam::viscosityModel::New
+namespace Foam
+{
+    defineTypeNameAndDebug(HeliumModel, 0);
+    defineRunTimeSelectionTable(HeliumModel, dictionary);
+}
+
+
+// * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
+
+Foam::HeliumModel::HeliumModel
 (
     const word& name,
-    const dictionary& viscosityProperties,
+    const dictionary& HeliumProperties,
     const volVectorField& U,
     const surfaceScalarField& phi
 )
+:
+    name_(name),
+    HeliumProperties_(HeliumProperties),
+    U_(U),
+    phi_(phi)
+{}
+
+
+// * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * * //
+
+
+bool Foam::HeliumModel::read(const dictionary& HeliumProperties)
 {
-    const word modelType(viscosityProperties.lookup("transportModel"));
+    HeliumProperties_ = HeliumProperties;
 
-    Info<< "Selecting incompressible transport model " << modelType << endl;
-
-    dictionaryConstructorTable::iterator cstrIter =
-        dictionaryConstructorTablePtr_->find(modelType);
-
-    if (cstrIter == dictionaryConstructorTablePtr_->end())
-    {
-        FatalErrorInFunction
-            << "Unknown viscosityModel type "
-            << modelType << nl << nl
-            << "Valid viscosityModels are : " << endl
-            << dictionaryConstructorTablePtr_->sortedToc()
-            << exit(FatalError);
-    }
-
-    return autoPtr<viscosityModel>
-        (cstrIter()(name, viscosityProperties, U, phi));
+    return true;
 }
 
 
