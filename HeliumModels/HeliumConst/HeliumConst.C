@@ -31,34 +31,34 @@ License
 
 namespace Foam
 {
-namespace viscosityModels
+namespace HeliumModels
 {
     defineTypeNameAndDebug(HeliumConst, 0);
 
     addToRunTimeSelectionTable
     (
-        viscosityModel,
+        HeliumModel,
         HeliumConst,
         dictionary
     );
 
 	const Foam::dimensionedScalar
-	Foam::viscosityModels::HeliumConst::Tlambda_("Tlambda", dimTemperature, 2.1711132461);
+	Foam::HeliumModels::HeliumConst::Tlambda_("Tlambda", dimTemperature, 2.1711132461);
 
 	const Foam::dimensionedScalar
-	Foam::viscosityModels::HeliumConst::TMin_("TMin", dimTemperature, 1.5);
+	Foam::HeliumModels::HeliumConst::TMin_("TMin", dimTemperature, 1.5);
 	
 	const Foam::dimensionedScalar
-	Foam::viscosityModels::HeliumConst::TMax_("TMax", dimTemperature, 2.167);
+	Foam::HeliumModels::HeliumConst::TMax_("TMax", dimTemperature, 2.167);
 	
 	const Foam::label
-	Foam::viscosityModels::HeliumConst::indexMin_(0);
+	Foam::HeliumModels::HeliumConst::indexMin_(0);
 	
 	const Foam::label
-	Foam::viscosityModels::HeliumConst::indexMax_(667);
+	Foam::HeliumModels::HeliumConst::indexMax_(667);
 	
 	const Foam::scalar
-	Foam::viscosityModels::HeliumConst::dT_(0.001);
+	Foam::HeliumModels::HeliumConst::dT_(0.001);
 
 	#include "staticTables.H"
 }
@@ -68,31 +68,22 @@ namespace viscosityModels
 // * * * * * * * * * * * * Private Member Functions  * * * * * * * * * * * * //
 
 Foam::tmp<Foam::volScalarField>
-Foam::viscosityModels::HeliumConst::calcNu() 
+Foam::HeliumModels::HeliumConst::calcNu() 
 {
 	calcHeProp(etaHe_, etaHeTable_);
 	calcHeProp(rhoHe_, rhoHeTable_);
 
-    tmp<volScalarField> nu
-    (
-		new volScalarField
+	return tmp<volScalarField>
+	(
+	    new volScalarField
 		(
-			IOobject
-        	(
-        	    "nuLocal",
-        	    U_.time().timeName(),
-        	    U_.db(),
-        	    IOobject::NO_READ,
-        	    IOobject::NO_WRITE
-        	),
+		    "nu",
 			etaHe_/rhoHe_
 		)
-    );
-
-    return nu;
+	);
 }
 
-void Foam::viscosityModels::HeliumConst::calcHeProp
+void Foam::HeliumModels::HeliumConst::calcHeProp
 (
 	Foam::volScalarField& vsf,
 	const List<scalar>& vsfTable
@@ -190,16 +181,16 @@ void Foam::viscosityModels::HeliumConst::calcHeProp
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::viscosityModels::HeliumConst::HeliumConst
+Foam::HeliumModels::HeliumConst::HeliumConst
 (
     const word& name,
-    const dictionary& viscosityProperties,
+    const dictionary& HeliumProperties,
     const volVectorField& U,
     const surfaceScalarField& phi
 )
 :
-    viscosityModel(name, viscosityProperties, U, phi),
-    HeliumConstCoeffs_(viscosityProperties.subDict(typeName + "Coeffs")),
+    HeliumModel(name, HeliumProperties, U, phi),
+    HeliumConstCoeffs_(HeliumProperties.subDict(typeName + "Coeffs")),
     TMean_("TMean", dimTemperature, HeliumConstCoeffs_),
     betaHe_
     (
@@ -335,17 +326,17 @@ Foam::viscosityModels::HeliumConst::HeliumConst
 
 // * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * * //
 
-void Foam::viscosityModels::HeliumConst::correct()
+void Foam::HeliumModels::HeliumConst::correct()
 {}
 
-bool Foam::viscosityModels::HeliumConst::read
+bool Foam::HeliumModels::HeliumConst::read
 (
-    const dictionary& viscosityProperties
+    const dictionary& HeliumProperties
 )
 {
-    viscosityModel::read(viscosityProperties);
+    HeliumModel::read(HeliumProperties);
 
-    HeliumConstCoeffs_ = viscosityProperties.subDict(typeName + "Coeffs");
+    HeliumConstCoeffs_ = HeliumProperties.subDict(typeName + "Coeffs");
 
     HeliumConstCoeffs_.lookup("TMean") >> TMean_;
 

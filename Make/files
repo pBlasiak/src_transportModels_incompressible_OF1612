@@ -1,5 +1,6 @@
 HeliumModels/HeliumModel/HeliumModel.C
 HeliumModels/HeliumModel/HeliumModelNew.C
+HeliumModels/HeliumConst/HeliumConst.C
 
 singlePhaseHeliumTransportModel/singlePhaseHeliumTransportModel.H
 

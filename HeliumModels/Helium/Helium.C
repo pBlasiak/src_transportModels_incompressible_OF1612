@@ -31,13 +31,13 @@ License
 
 namespace Foam
 {
-namespace viscosityModels
+namespace HeliumModels
 {
     defineTypeNameAndDebug(Helium, 0);
 
     addToRunTimeSelectionTable
     (
-        viscosityModel,
+        HeliumModel,
         Helium,
         dictionary
     );
@@ -48,7 +48,7 @@ namespace viscosityModels
 // * * * * * * * * * * * * Private Member Functions  * * * * * * * * * * * * //
 
 Foam::tmp<Foam::volScalarField>
-Foam::viscosityModels::Helium::calcNu() 
+Foam::HeliumModels::Helium::calcNu() 
 {
 	Info<< "Jestem w calcNu() w Helium. " << endl;
 	calcHeProp(etaHe_, etaHeTable_);
@@ -78,12 +78,27 @@ Foam::viscosityModels::Helium::calcNu()
     );
 }
 
-void Foam::viscosityModels::Helium::calcHeProp
+void Foam::HeliumModels::Helium::calcHeProp
 (
 	Foam::volScalarField& vsf,
 	const List<scalar>& vsfTable
 )
 {
+    volScalarField Tmin
+    (
+        IOobject
+        (
+            "Tmin",
+            U_.time().timeName(),
+            U_.db(),
+            IOobject::NO_READ,
+            IOobject::NO_WRITE
+        ),
+		T_
+    );
+	Tmin = TMin_;
+	if (T_<Tmin) Info<< "sdfkskjd" << endl;
+
 	forAll(vsf, celli)
 	{
 		if (T_[celli] < TMin_.value())
@@ -148,16 +163,16 @@ void Foam::viscosityModels::Helium::calcHeProp
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::viscosityModels::Helium::Helium
+Foam::HeliumModels::Helium::Helium
 (
     const word& name,
-    const dictionary& viscosityProperties,
+    const dictionary& HeliumProperties,
     const volVectorField& U,
     const surfaceScalarField& phi
 )
 :
-    HeliumConst(name, viscosityProperties, U, phi),
-    //HeliumCoeffs_(viscosityProperties.subDict(typeName + "Coeffs")),
+    HeliumConst(name, HeliumProperties, U, phi),
+    //HeliumCoeffs_(HeliumProperties.subDict(typeName + "Coeffs")),
 	T_(U_.db().lookupObject<volScalarField>("T")),
     nuMin_("nuMin", dimViscosity, etaHeTable_[indexMin_]/rhoHeTable_[indexMin_]),
     nuMax_("nuMax", dimViscosity, etaHeTable_[indexMax_]/rhoHeTable_[indexMax_])
@@ -168,7 +183,7 @@ Foam::viscosityModels::Helium::Helium
 
 // * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * * //
 
-void Foam::viscosityModels::Helium::correct()
+void Foam::HeliumModels::Helium::correct()
 {
 	Info<< "Helium updates thermal properties..." << endl;
 	nu_ = calcNu();
@@ -179,14 +194,14 @@ void Foam::viscosityModels::Helium::correct()
 	calcHeProp(onebyf_, onebyfTable_);
 }
 
-//bool Foam::viscosityModels::Helium::read
+//bool Foam::HeliumModels::Helium::read
 //(
-//    const dictionary& viscosityProperties
+//    const dictionary& HeliumProperties
 //)
 //{
-//    viscosityModel::read(viscosityProperties);
+//    HeliumModel::read(HeliumProperties);
 //
-//    //HeliumCoeffs_ = viscosityProperties.subDict(typeName + "Coeffs");
+//    //HeliumCoeffs_ = HeliumProperties.subDict(typeName + "Coeffs");
 //
 //    //HeliumCoeffs_.lookup("rhoHe") >> rhoHe_;
 //

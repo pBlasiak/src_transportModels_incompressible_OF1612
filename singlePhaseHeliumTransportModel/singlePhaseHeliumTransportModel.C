@@ -24,7 +24,7 @@ License
 \*---------------------------------------------------------------------------*/
 
 #include "singlePhaseHeliumTransportModel.H"
-#include "viscosityModel.H"
+#include "HeliumModel.H"
 #include "volFields.H"
 
 
@@ -47,7 +47,7 @@ Foam::singlePhaseHeliumTransportModel::singlePhaseHeliumTransportModel
             IOobject::NO_WRITE
         )
     ),
-    viscosityModelPtr_(viscosityModel::New("nu", *this, U, phi))
+    HeliumModelPtr_(HeliumModel::New("helium", *this, U, phi))
 {}
 
 
@@ -62,20 +62,20 @@ Foam::singlePhaseHeliumTransportModel::~singlePhaseHeliumTransportModel()
 Foam::tmp<Foam::volScalarField>
 Foam::singlePhaseHeliumTransportModel::nu() const
 {
-    return viscosityModelPtr_->nu();
+    return HeliumModelPtr_->nu();
 }
 
 
 Foam::tmp<Foam::scalarField>
 Foam::singlePhaseHeliumTransportModel::nu(const label patchi) const
 {
-    return viscosityModelPtr_->nu(patchi);
+    return HeliumModelPtr_->nu(patchi);
 }
 
 
 void Foam::singlePhaseHeliumTransportModel::correct()
 {
-    viscosityModelPtr_->correct();
+    HeliumModelPtr_->correct();
 }
 
 
@@ -83,7 +83,7 @@ bool Foam::singlePhaseHeliumTransportModel::read()
 {
     if (regIOobject::read())
     {
-        return viscosityModelPtr_->read(*this);
+        return HeliumModelPtr_->read(*this);
     }
     else
     {

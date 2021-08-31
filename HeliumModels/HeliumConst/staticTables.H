@@ -5,7 +5,7 @@
  the dimension of the array is 668
 */
 const Foam::List<Foam::scalar> 
-Foam::viscosityModels::HeliumConst::betaHeTable_
+Foam::HeliumModels::HeliumConst::betaHeTable_
 (
 	IStringStream
 	(
@@ -683,7 +683,7 @@ Foam::viscosityModels::HeliumConst::betaHeTable_
 );
 
 const Foam::List<Foam::scalar> 
-Foam::viscosityModels::HeliumConst::AGMHeTable_
+Foam::HeliumModels::HeliumConst::AGMHeTable_
 (
 	IStringStream
 	(
@@ -1361,7 +1361,7 @@ Foam::viscosityModels::HeliumConst::AGMHeTable_
 );
 
 const Foam::List<Foam::scalar> 
-Foam::viscosityModels::HeliumConst::sHeTable_
+Foam::HeliumModels::HeliumConst::sHeTable_
 (
 	IStringStream
 	(
@@ -2039,7 +2039,7 @@ Foam::viscosityModels::HeliumConst::sHeTable_
 );
 
 const Foam::List<Foam::scalar> 
-Foam::viscosityModels::HeliumConst::etaHeTable_
+Foam::HeliumModels::HeliumConst::etaHeTable_
 (
 	IStringStream
 	(
@@ -2717,7 +2717,7 @@ Foam::viscosityModels::HeliumConst::etaHeTable_
 );
 
 const Foam::List<Foam::scalar> 
-Foam::viscosityModels::HeliumConst::cpHeTable_
+Foam::HeliumModels::HeliumConst::cpHeTable_
 (
 	IStringStream
 	(
@@ -3396,7 +3396,7 @@ Foam::viscosityModels::HeliumConst::cpHeTable_
 
 
 const Foam::List<Foam::scalar> 
-Foam::viscosityModels::HeliumConst::onebyfTable_
+Foam::HeliumModels::HeliumConst::onebyfTable_
 (
 	IStringStream
 	(
@@ -4075,7 +4075,7 @@ Foam::viscosityModels::HeliumConst::onebyfTable_
 
 
 const Foam::List<Foam::scalar> 
-Foam::viscosityModels::HeliumConst::rhoHeTable_
+Foam::HeliumModels::HeliumConst::rhoHeTable_
 (
 	IStringStream
 	(

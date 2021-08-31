@@ -105,7 +105,7 @@ public:
 
     // Selectors
 
-        //- Return a reference to the selected viscosity model
+        //- Return a reference to the selected Helium model
         static autoPtr<HeliumModel> New
         (
             const word& name,
@@ -140,44 +140,37 @@ public:
             return HeliumProperties_;
         }
 
-        //- Return the laminar viscosity
+        //- Return the laminar Helium
         virtual tmp<volScalarField> nu() const = 0;
 
-        //- Return the laminar viscosity for patch
+        //- Return the laminar Helium for patch
         virtual tmp<scalarField> nu(const label patchi) const = 0;
 
-        //- Correct the laminar viscosity
+        //- Correct the laminar Helium
         virtual void correct() = 0;
 
         //- Read transportProperties dictionary
         virtual bool read(const dictionary& HeliumProperties) = 0;
 
 		//- Returns thermal expansion coefficient 
-//        virtual tmp<volScalarField> beta() const = 0;
         virtual const volScalarField& beta() const = 0;
 
 		//- Returns Goerter-Mellink coefficient 
-//        virtual tmp<volScalarField> AGM() const = 0;
         virtual const volScalarField& AGM() const = 0;
 
 		//- Returns entropy 
-//        virtual tmp<volScalarField> s() const = 0;
         virtual const volScalarField& s() const = 0;
 
-		//- Returns dynamic viscosity 
-//        virtual tmp<volScalarField> eta() const = 0;
+		//- Returns dynamic Helium 
         virtual const volScalarField& eta() const = 0;
 	
 		//- Returns specific heat capacity 
-//        virtual tmp<volScalarField> cp() const = 0;
         virtual const volScalarField& cp() const = 0;
 
 		//- Returns thermal conductivity function 
-//        virtual tmp<volScalarField> kappa() const = 0;
         virtual const volScalarField& kappa() const = 0;
 		
         //- Returns the density
-        //virtual tmp<volScalarField> rho() const = 0;
         virtual const volScalarField& rho() const = 0;
 };
 
