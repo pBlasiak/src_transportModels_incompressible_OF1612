@@ -84,21 +84,6 @@ void Foam::HeliumModels::Helium::calcHeProp
 	const List<scalar>& vsfTable
 )
 {
-    volScalarField Tmin
-    (
-        IOobject
-        (
-            "Tmin",
-            U_.time().timeName(),
-            U_.db(),
-            IOobject::NO_READ,
-            IOobject::NO_WRITE
-        ),
-		T_
-    );
-	Tmin = TMin_;
-	if (T_<Tmin) Info<< "sdfkskjd" << endl;
-
 	forAll(vsf, celli)
 	{
 		if (T_[celli] < TMin_.value())

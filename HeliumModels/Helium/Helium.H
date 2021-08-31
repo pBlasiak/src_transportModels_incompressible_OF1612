@@ -60,7 +60,6 @@ protected:
 
         //dictionary HeliumCoeffs_;
 
-        const volScalarField& T_;
 
         dimensionedScalar nuMin_;
         dimensionedScalar nuMax_;
@@ -71,8 +70,6 @@ protected:
         //- Calculate and return the laminar Helium
         tmp<volScalarField> calcNu() ;
 
-		//- Calculates helium thermal property based on temperature
-        void calcHeProp(volScalarField& vsf, const List<scalar>& vsfTable);
 
 
 public:

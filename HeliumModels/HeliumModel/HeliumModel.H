@@ -71,6 +71,7 @@ protected:
         const surfaceScalarField& phi_;
 
 
+
     // Private Member Functions
 
         //- Disallow copy construct

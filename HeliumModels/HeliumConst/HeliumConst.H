@@ -102,7 +102,11 @@ protected:
 
         dictionary HeliumConstCoeffs_;
 
-		dimensionedScalar TMean_;
+        const volScalarField& T_;
+
+		dimensionedScalar TMean0_;
+
+		volScalarField TMean_;
 
         //- Thermal expansion coefficient
         volScalarField betaHe_;
@@ -128,6 +132,13 @@ protected:
         //- Kinematic Helium
         volScalarField nu_;
 
+		//- Calculates helium thermal property based on temperature
+        void calcHeProp
+		(
+		    volScalarField& vsf, 
+			const List<scalar>& vsfTable,
+			const volScalarField& T
+		);
 
 
     // Private Member Functions
@@ -135,8 +146,8 @@ protected:
         //- Calculate and return the laminar Helium
         tmp<volScalarField> calcNu() ;
 
-		//- Calculates helium thermal property based on mean temperature
-        void calcHeProp(volScalarField& vsf, const List<scalar>& vsfTable);
+		////- Calculates helium thermal property based on mean temperature
+        //void calcHeProp(volScalarField& vsf, const List<scalar>& vsfTable);
 
 
 		friend class Helium;
