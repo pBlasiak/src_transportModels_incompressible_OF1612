@@ -1,0 +1,59 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+Foam	incompressibleTwoPhaseMixture.C	/^namespace Foam$/;"	n	language:C++	file:
+Foam	incompressibleTwoPhaseMixture.H	/^namespace Foam$/;"	n	language:C++
+Foam::incompressibleTwoPhaseMixture	incompressibleTwoPhaseMixture.H	/^class incompressibleTwoPhaseMixture$/;"	c	language:C++	namespace:Foam
+Foam::incompressibleTwoPhaseMixture::U	incompressibleTwoPhaseMixture.H	/^        const volVectorField& U() const$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+Foam::incompressibleTwoPhaseMixture::U_	incompressibleTwoPhaseMixture.H	/^        const volVectorField& U_;$/;"	m	language:C++	class:Foam::incompressibleTwoPhaseMixture
+Foam::incompressibleTwoPhaseMixture::calcNu	incompressibleTwoPhaseMixture.C	/^void Foam::incompressibleTwoPhaseMixture::calcNu()$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+Foam::incompressibleTwoPhaseMixture::correct	incompressibleTwoPhaseMixture.H	/^        virtual void correct()$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+Foam::incompressibleTwoPhaseMixture::incompressibleTwoPhaseMixture	incompressibleTwoPhaseMixture.C	/^Foam::incompressibleTwoPhaseMixture::incompressibleTwoPhaseMixture$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+Foam::incompressibleTwoPhaseMixture::mu	incompressibleTwoPhaseMixture.C	/^Foam::incompressibleTwoPhaseMixture::mu() const$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+Foam::incompressibleTwoPhaseMixture::mu	incompressibleTwoPhaseMixture.C	/^Foam::incompressibleTwoPhaseMixture::mu(const label patchI) const$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+Foam::incompressibleTwoPhaseMixture::muf	incompressibleTwoPhaseMixture.C	/^Foam::incompressibleTwoPhaseMixture::muf() const$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+Foam::incompressibleTwoPhaseMixture::nu	incompressibleTwoPhaseMixture.H	/^        virtual tmp<scalarField> nu(const label patchi) const$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+Foam::incompressibleTwoPhaseMixture::nu	incompressibleTwoPhaseMixture.H	/^        virtual tmp<volScalarField> nu() const$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+Foam::incompressibleTwoPhaseMixture::nuModel1	incompressibleTwoPhaseMixture.H	/^        const viscosityModel& nuModel1() const$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+Foam::incompressibleTwoPhaseMixture::nuModel1_	incompressibleTwoPhaseMixture.H	/^        autoPtr<viscosityModel> nuModel1_;$/;"	m	language:C++	class:Foam::incompressibleTwoPhaseMixture
+Foam::incompressibleTwoPhaseMixture::nuModel2	incompressibleTwoPhaseMixture.H	/^        const viscosityModel& nuModel2() const$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+Foam::incompressibleTwoPhaseMixture::nuModel2_	incompressibleTwoPhaseMixture.H	/^        autoPtr<viscosityModel> nuModel2_;$/;"	m	language:C++	class:Foam::incompressibleTwoPhaseMixture
+Foam::incompressibleTwoPhaseMixture::nu_	incompressibleTwoPhaseMixture.H	/^        volScalarField nu_;$/;"	m	language:C++	class:Foam::incompressibleTwoPhaseMixture
+Foam::incompressibleTwoPhaseMixture::nuf	incompressibleTwoPhaseMixture.C	/^Foam::incompressibleTwoPhaseMixture::nuf() const$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+Foam::incompressibleTwoPhaseMixture::phi_	incompressibleTwoPhaseMixture.H	/^        const surfaceScalarField& phi_;$/;"	m	language:C++	class:Foam::incompressibleTwoPhaseMixture
+Foam::incompressibleTwoPhaseMixture::read	incompressibleTwoPhaseMixture.C	/^bool Foam::incompressibleTwoPhaseMixture::read()$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+Foam::incompressibleTwoPhaseMixture::rho1	incompressibleTwoPhaseMixture.H	/^        const dimensionedScalar& rho1() const$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+Foam::incompressibleTwoPhaseMixture::rho1_	incompressibleTwoPhaseMixture.H	/^        dimensionedScalar rho1_;$/;"	m	language:C++	class:Foam::incompressibleTwoPhaseMixture
+Foam::incompressibleTwoPhaseMixture::rho2	incompressibleTwoPhaseMixture.H	/^        const dimensionedScalar& rho2() const$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+Foam::incompressibleTwoPhaseMixture::rho2_	incompressibleTwoPhaseMixture.H	/^        dimensionedScalar rho2_;$/;"	m	language:C++	class:Foam::incompressibleTwoPhaseMixture
+Foam::incompressibleTwoPhaseMixture::~incompressibleTwoPhaseMixture	incompressibleTwoPhaseMixture.H	/^    virtual ~incompressibleTwoPhaseMixture()$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+U	incompressibleTwoPhaseMixture.H	/^        const volVectorField& U() const$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+U_	incompressibleTwoPhaseMixture.H	/^        const volVectorField& U_;$/;"	m	language:C++	class:Foam::incompressibleTwoPhaseMixture
+calcNu	incompressibleTwoPhaseMixture.C	/^void Foam::incompressibleTwoPhaseMixture::calcNu()$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+correct	incompressibleTwoPhaseMixture.H	/^        virtual void correct()$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+incompressibleTwoPhaseMixture	incompressibleTwoPhaseMixture.C	/^Foam::incompressibleTwoPhaseMixture::incompressibleTwoPhaseMixture$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+incompressibleTwoPhaseMixture	incompressibleTwoPhaseMixture.H	/^class incompressibleTwoPhaseMixture$/;"	c	language:C++	namespace:Foam
+incompressibleTwoPhaseMixture.C	incompressibleTwoPhaseMixture.C	1;"	F	language:C++
+incompressibleTwoPhaseMixture.H	incompressibleTwoPhaseMixture.H	1;"	F	language:C++
+incompressibleTwoPhaseMixture_H	incompressibleTwoPhaseMixture.H	36;"	d	language:C++
+mu	incompressibleTwoPhaseMixture.C	/^Foam::incompressibleTwoPhaseMixture::mu() const$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+mu	incompressibleTwoPhaseMixture.C	/^Foam::incompressibleTwoPhaseMixture::mu(const label patchI) const$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+muf	incompressibleTwoPhaseMixture.C	/^Foam::incompressibleTwoPhaseMixture::muf() const$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+nu	incompressibleTwoPhaseMixture.H	/^        virtual tmp<scalarField> nu(const label patchi) const$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+nu	incompressibleTwoPhaseMixture.H	/^        virtual tmp<volScalarField> nu() const$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+nuModel1	incompressibleTwoPhaseMixture.H	/^        const viscosityModel& nuModel1() const$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+nuModel1_	incompressibleTwoPhaseMixture.H	/^        autoPtr<viscosityModel> nuModel1_;$/;"	m	language:C++	class:Foam::incompressibleTwoPhaseMixture
+nuModel2	incompressibleTwoPhaseMixture.H	/^        const viscosityModel& nuModel2() const$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+nuModel2_	incompressibleTwoPhaseMixture.H	/^        autoPtr<viscosityModel> nuModel2_;$/;"	m	language:C++	class:Foam::incompressibleTwoPhaseMixture
+nu_	incompressibleTwoPhaseMixture.H	/^        volScalarField nu_;$/;"	m	language:C++	class:Foam::incompressibleTwoPhaseMixture
+nuf	incompressibleTwoPhaseMixture.C	/^Foam::incompressibleTwoPhaseMixture::nuf() const$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+phi_	incompressibleTwoPhaseMixture.H	/^        const surfaceScalarField& phi_;$/;"	m	language:C++	class:Foam::incompressibleTwoPhaseMixture
+read	incompressibleTwoPhaseMixture.C	/^bool Foam::incompressibleTwoPhaseMixture::read()$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+rho1	incompressibleTwoPhaseMixture.H	/^        const dimensionedScalar& rho1() const$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+rho1_	incompressibleTwoPhaseMixture.H	/^        dimensionedScalar rho1_;$/;"	m	language:C++	class:Foam::incompressibleTwoPhaseMixture
+rho2	incompressibleTwoPhaseMixture.H	/^        const dimensionedScalar& rho2() const$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
+rho2_	incompressibleTwoPhaseMixture.H	/^        dimensionedScalar rho2_;$/;"	m	language:C++	class:Foam::incompressibleTwoPhaseMixture
+~incompressibleTwoPhaseMixture	incompressibleTwoPhaseMixture.H	/^    virtual ~incompressibleTwoPhaseMixture()$/;"	f	language:C++	class:Foam::incompressibleTwoPhaseMixture
