@@ -5,7 +5,7 @@
  the dimension of the array is 668
 */
 const Foam::List<Foam::scalar> 
-Foam::HeliumModels::HeliumConst::betaHeTable_
+Foam::HeliumModel::betaHeTable_
 (
 	IStringStream
 	(
@@ -683,7 +683,7 @@ Foam::HeliumModels::HeliumConst::betaHeTable_
 );
 
 const Foam::List<Foam::scalar> 
-Foam::HeliumModels::HeliumConst::AGMHeTable_
+Foam::HeliumModel::AGMHeTable_
 (
 	IStringStream
 	(
@@ -1361,7 +1361,7 @@ Foam::HeliumModels::HeliumConst::AGMHeTable_
 );
 
 const Foam::List<Foam::scalar> 
-Foam::HeliumModels::HeliumConst::sHeTable_
+Foam::HeliumModel::sHeTable_
 (
 	IStringStream
 	(
@@ -2039,7 +2039,7 @@ Foam::HeliumModels::HeliumConst::sHeTable_
 );
 
 const Foam::List<Foam::scalar> 
-Foam::HeliumModels::HeliumConst::etaHeTable_
+Foam::HeliumModel::etaHeTable_
 (
 	IStringStream
 	(
@@ -2717,7 +2717,7 @@ Foam::HeliumModels::HeliumConst::etaHeTable_
 );
 
 const Foam::List<Foam::scalar> 
-Foam::HeliumModels::HeliumConst::cpHeTable_
+Foam::HeliumModel::cpHeTable_
 (
 	IStringStream
 	(
@@ -3396,7 +3396,7 @@ Foam::HeliumModels::HeliumConst::cpHeTable_
 
 
 const Foam::List<Foam::scalar> 
-Foam::HeliumModels::HeliumConst::onebyfTable_
+Foam::HeliumModel::onebyfTable_
 (
 	IStringStream
 	(
@@ -4075,7 +4075,7 @@ Foam::HeliumModels::HeliumConst::onebyfTable_
 
 
 const Foam::List<Foam::scalar> 
-Foam::HeliumModels::HeliumConst::rhoHeTable_
+Foam::HeliumModel::rhoHeTable_
 (
 	IStringStream
 	(

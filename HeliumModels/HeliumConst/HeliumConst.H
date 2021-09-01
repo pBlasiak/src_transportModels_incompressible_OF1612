@@ -26,6 +26,7 @@ Class
 
 Description
      Helium II model with constant thermophysical properties.
+	 The properties are calculated at a mean temperature.
 
 SourceFiles
     HeliumConst.C
@@ -57,48 +58,8 @@ class HeliumConst
 :
     public HeliumModel
 {
-    // Private data
-		//- Maximum index number for thermophysical tables i = 667
-		static const label indexMax_;
-
-		//- Step of temperature in the thermophysical tables dT = 0.001 K
-		static const scalar dT_;
-
     // Protected data
 protected:
-		//- lambda Temperature 2.1711132461
-		static const dimensionedScalar Tlambda_;
-
-		//- Minimum temperature TMin = 1.5 K
-		static const dimensionedScalar TMin_;
-
-		//- Maximum temperature TMax = 2.167 K
-		static const dimensionedScalar TMax_;
-
-		//- Minimum index number for thermophysical tables i = 0
-		static const label indexMin_;
-
-		//- Table for betaHe
-		static const List<scalar> betaHeTable_;
-
-		//- Table for AGMHe
-		static const List<scalar> AGMHeTable_;
-
-		//- Table for sHe
-		static const List<scalar> sHeTable_;
-
-		//- Table for etaHe
-		static const List<scalar> etaHeTable_;
-
-		//- Table for cpHe
-		static const List<scalar> cpHeTable_;
-
-		//- Table for onebyf
-		static const List<scalar> onebyfTable_;
-
-		//- Table for rhoHe
-		static const List<scalar> rhoHeTable_;
-
 
         dictionary HeliumConstCoeffs_;
 
@@ -107,38 +68,6 @@ protected:
 		dimensionedScalar TMean0_;
 
 		volScalarField TMean_;
-
-        //- Thermal expansion coefficient
-        volScalarField betaHe_;
-		
-        //- Goerter-Mellink parameter
-        volScalarField AGMHe_;
-
-        //- Entropy
-        volScalarField sHe_;
-		
-        //- Dynamic Helium
-        volScalarField etaHe_;
-		
-        //- Specific heat at constant pressure
-        volScalarField cpHe_;
-		
-        //- Thermal conductivity function
-        volScalarField onebyf_;
-
-        //- Density of the mixture 
-        volScalarField rhoHe_;
-
-        //- Kinematic Helium
-        volScalarField nu_;
-
-		//- Calculates helium thermal property based on temperature
-        void calcHeProp
-		(
-		    volScalarField& vsf, 
-			const List<scalar>& vsfTable,
-			const volScalarField& T
-		);
 
 
     // Private Member Functions
@@ -150,8 +79,8 @@ protected:
         //void calcHeProp(volScalarField& vsf, const List<scalar>& vsfTable);
 
 
-		friend class Helium;
-		friend class HeliumConstRho;
+		//friend class Helium;
+		//friend class HeliumConstRho;
 public:
 
     //- Runtime type information
@@ -177,63 +106,6 @@ public:
 
     // Member Functions
 
-        //- Return the laminar Helium
-        tmp<volScalarField> nu() const override
-        {
-            return nu_;
-        }
-
-        //- Return the laminar Helium for patch
-        tmp<scalarField> nu(const label patchi) const override
-        {
-            return nu_.boundaryField()[patchi];
-        }
-
-		//- Returns thermal expansion coefficient of He
-        virtual const volScalarField& beta() const override
-		{
-			return betaHe_;
-		}
-
-		//- Returns Goerter-Mellink coefficient for helium based on temperature
-        virtual const volScalarField& AGM() const override
-		{
-			return AGMHe_;
-		}
-
-		//- Returns entropy for helium based on temperature
-        virtual const volScalarField& s() const override
-		{
-			return sHe_;
-		}
-
-		//- Returns dynamic Helium for helium based on temperature
-        virtual const volScalarField& eta() const override
-		{
-			return etaHe_;
-		}
-	
-		//- Returns specific heat capacity for helium based on temperature
-        virtual const volScalarField& cp() const override
-		{
-			return cpHe_;
-		}
-
-		//- Returns reciprocal of thermal conductivity function for helium based on temperature
-        virtual const volScalarField& kappa() const override
-		{
-			return onebyf_;
-		}
-
-		virtual const volScalarField& rho() const override
-		{
-			return rhoHe_;
-		}
-
-		static const dimensionedScalar Tlambda() 
-		{
-			return Tlambda_;
-		}
 
         //- Correct the laminar Helium and thermal properties of He
         virtual void correct() override;

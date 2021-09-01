@@ -47,7 +47,8 @@ SourceFiles
 #include "surfaceFieldsFwd.H"
 #include "dimensionedScalar.H"
 #include "runTimeSelectionTables.H"
-
+#include "typeInfo.H"
+#include "volFields.H"
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 namespace Foam
@@ -59,10 +60,49 @@ namespace Foam
 
 class HeliumModel
 {
+    // Private data
+		//- Maximum index number for thermophysical tables i = 667
+		static const label indexMax_;
+
+		//- Step of temperature in the thermophysical tables dT = 0.001 K
+		static const dimensionedScalar dT_;
 
 protected:
 
     // Protected data
+	
+		//- lambda Temperature 2.1711132461
+		static const dimensionedScalar Tlambda_;
+
+		//- Minimum temperature TMin = 1.5 K
+		static const dimensionedScalar TMin_;
+
+		//- Maximum temperature TMax = 2.167 K
+		static const dimensionedScalar TMax_;
+
+		//- Minimum index number for thermophysical tables i = 0
+		static const label indexMin_;
+
+		//- Table for betaHe
+		static const List<scalar> betaHeTable_;
+
+		//- Table for AGMHe
+		static const List<scalar> AGMHeTable_;
+
+		//- Table for sHe
+		static const List<scalar> sHeTable_;
+
+		//- Table for etaHe
+		static const List<scalar> etaHeTable_;
+
+		//- Table for cpHe
+		static const List<scalar> cpHeTable_;
+
+		//- Table for onebyf
+		static const List<scalar> onebyfTable_;
+
+		//- Table for rhoHe
+		static const List<scalar> rhoHeTable_;
 
         word name_;
         dictionary HeliumProperties_;
@@ -70,7 +110,40 @@ protected:
         const volVectorField& U_;
         const surfaceScalarField& phi_;
 
+		volScalarField TMinField_;
+		volScalarField TMaxField_;
 
+        //- Thermal expansion coefficient
+        volScalarField betaHe_;
+		
+        //- Goerter-Mellink parameter
+        volScalarField AGMHe_;
+
+        //- Entropy
+        volScalarField sHe_;
+		
+        //- Dynamic Helium
+        volScalarField etaHe_;
+		
+        //- Specific heat at constant pressure
+        volScalarField cpHe_;
+		
+        //- Thermal conductivity function
+        volScalarField onebyf_;
+
+        //- Density of the mixture 
+        volScalarField rhoHe_;
+
+        //- Kinematic Helium
+        volScalarField nu_;
+
+		//- Calculates helium thermal property based on temperature
+        void calcHeProp
+		(
+		    volScalarField& vsf, 
+			const List<scalar>& vsfTable,
+			const volScalarField& T
+		);
 
     // Private Member Functions
 
@@ -141,38 +214,70 @@ public:
             return HeliumProperties_;
         }
 
-        //- Return the laminar Helium
-        virtual tmp<volScalarField> nu() const = 0;
+        //- Return the laminar kinematic viscosity of Helium
+        virtual tmp<volScalarField> nu() const
+        {
+            return nu_;
+        }
 
-        //- Return the laminar Helium for patch
-        virtual tmp<scalarField> nu(const label patchi) const = 0;
+        //- Return the laminar kinematic viscosity of Helium for patch
+        virtual tmp<scalarField> nu(const label patchi) const
+        {
+            return nu_.boundaryField()[patchi];
+        }
 
+		//- Returns thermal expansion coefficient 
+        virtual const volScalarField& beta() const
+		{
+			return betaHe_;
+		}
+
+		//- Returns Goerter-Mellink coefficient 
+        virtual const volScalarField& AGM() const
+		{
+			return AGMHe_;
+		}
+
+		//- Returns entropy 
+        virtual const volScalarField& s() const
+		{
+			return sHe_;
+		}
+
+		//- Returns dynamic Helium 
+        virtual const volScalarField& eta() const
+		{
+			return etaHe_;
+		}
+	
+		//- Returns specific heat capacity 
+        virtual const volScalarField& cp() const
+		{
+			return cpHe_;
+		}
+
+		//- Returns reciprocal of thermal conductivity function for helium based on temperature
+        virtual const volScalarField& kappa() const
+		{
+			return onebyf_;
+		}
+		
+        //- Returns the density
+        virtual const volScalarField& rho() const
+		{
+			return rhoHe_;
+		}
+
+		static const dimensionedScalar Tlambda() 
+		{
+			return Tlambda_;
+		}
+		
         //- Correct the laminar Helium
         virtual void correct() = 0;
 
         //- Read transportProperties dictionary
         virtual bool read(const dictionary& HeliumProperties) = 0;
-
-		//- Returns thermal expansion coefficient 
-        virtual const volScalarField& beta() const = 0;
-
-		//- Returns Goerter-Mellink coefficient 
-        virtual const volScalarField& AGM() const = 0;
-
-		//- Returns entropy 
-        virtual const volScalarField& s() const = 0;
-
-		//- Returns dynamic Helium 
-        virtual const volScalarField& eta() const = 0;
-	
-		//- Returns specific heat capacity 
-        virtual const volScalarField& cp() const = 0;
-
-		//- Returns thermal conductivity function 
-        virtual const volScalarField& kappa() const = 0;
-		
-        //- Returns the density
-        virtual const volScalarField& rho() const = 0;
 };
 
 

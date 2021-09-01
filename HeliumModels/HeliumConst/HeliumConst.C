@@ -41,26 +41,6 @@ namespace HeliumModels
         HeliumConst,
         dictionary
     );
-
-	const Foam::dimensionedScalar
-	Foam::HeliumModels::HeliumConst::Tlambda_("Tlambda", dimTemperature, 2.1711132461);
-
-	const Foam::dimensionedScalar
-	Foam::HeliumModels::HeliumConst::TMin_("TMin", dimTemperature, 1.5);
-	
-	const Foam::dimensionedScalar
-	Foam::HeliumModels::HeliumConst::TMax_("TMax", dimTemperature, 2.167);
-	
-	const Foam::label
-	Foam::HeliumModels::HeliumConst::indexMin_(0);
-	
-	const Foam::label
-	Foam::HeliumModels::HeliumConst::indexMax_(667);
-	
-	const Foam::scalar
-	Foam::HeliumModels::HeliumConst::dT_(0.001);
-
-	#include "staticTables.H"
 }
 }
 
@@ -70,8 +50,8 @@ namespace HeliumModels
 Foam::tmp<Foam::volScalarField>
 Foam::HeliumModels::HeliumConst::calcNu() 
 {
-	calcHeProp(etaHe_, etaHeTable_);
-	calcHeProp(rhoHe_, rhoHeTable_);
+	calcHeProp(etaHe_, etaHeTable_, TMean_);
+	calcHeProp(rhoHe_, rhoHeTable_, TMean_);
 
 	return tmp<volScalarField>
 	(
@@ -205,127 +185,15 @@ Foam::HeliumModels::HeliumConst::HeliumConst
         ),
         U.mesh(),
 		TMean0_
-    ),
-    betaHe_
-    (
-        IOobject
-        (
-            "betaHe",
-            U.mesh().time().timeName(),
-            U.mesh(),
-            IOobject::NO_READ,
-            IOobject::NO_WRITE
-        ),
-        U.mesh(),
-		dimensionedScalar("betaHe", dimless/dimTemperature, 0.0)
-    ),
-
-    AGMHe_
-    (
-        IOobject
-        (
-            "AGMHe",
-            U.mesh().time().timeName(),
-            U.mesh(),
-            IOobject::NO_READ,
-            IOobject::NO_WRITE
-        ),
-        U.mesh(),
-		dimensionedScalar("AGM", dimensionSet(-1,1,1,0,0,0,0), 0.0)
-    ),
-
-    sHe_
-    (
-        IOobject
-        (
-            "sHe",
-            U.mesh().time().timeName(),
-            U.mesh(),
-            IOobject::NO_READ,
-            IOobject::NO_WRITE
-        ),
-        U.mesh(),
-		dimensionedScalar("sHe", dimensionSet(0,2,-2,-1,0,0,0), 0.0)
-    ),
-
-    etaHe_
-    (
-        IOobject
-        (
-            "etaHe",
-            U.mesh().time().timeName(),
-            U.mesh(),
-            IOobject::NO_READ,
-            IOobject::NO_WRITE
-        ),
-        U.mesh(),
-		dimensionedScalar("etaHe", dimensionSet(1,-1,-1,0,0,0,0), 0.0)
-    ),
-
-    cpHe_
-    (
-        IOobject
-        (
-            "cpHe",
-            U.mesh().time().timeName(),
-            U.mesh(),
-            IOobject::NO_READ,
-            IOobject::NO_WRITE
-        ),
-        U.mesh(),
-		dimensionedScalar("cpHe", dimensionSet(0,2,-2,-1,0,0,0), 0.0)
-    ),
-	
-    onebyf_
-    (
-        IOobject
-        (
-            "onebyf",
-            U.mesh().time().timeName(),
-            U.mesh(),
-            IOobject::NO_READ,
-            IOobject::NO_WRITE
-        ),
-        U.mesh(),
-		dimensionedScalar("onebyf", dimensionSet(3,1,-9,-1,0,0,0), 0.0)
-    ),
-
-    rhoHe_
-    (
-        IOobject
-        (
-            "rhoHe",
-            U.mesh().time().timeName(),
-            U.mesh(),
-            IOobject::NO_READ,
-            IOobject::NO_WRITE
-        ),
-        U.mesh(),
-		dimensionedScalar("rhoHe", dimDensity, 0.0)
-    ),
-
-    nu_
-    (
-        IOobject
-        (
-            name,
-            U_.time().timeName(),
-            U_.db(),
-            IOobject::NO_READ,
-            IOobject::AUTO_WRITE
-        ),
-        //calcNu()
-        U.mesh(),
-		dimensionedScalar("nuHe", dimViscosity, 0.0)
     )
 {
 	Info<< "HeliumConst calculates thermal properties for TMean = " << TMean_ << endl;
 	nu_ = calcNu();
-	calcHeProp(betaHe_, betaHeTable_);
-	calcHeProp(AGMHe_, AGMHeTable_);
-	calcHeProp(sHe_, sHeTable_);
-	calcHeProp(cpHe_, cpHeTable_);
-	calcHeProp(onebyf_, onebyfTable_);
+	calcHeProp(betaHe_, betaHeTable_, TMean_);
+	calcHeProp(AGMHe_, AGMHeTable_, TMean_);
+	calcHeProp(sHe_, sHeTable_, TMean_);
+	calcHeProp(cpHe_, cpHeTable_, TMean_);
+	calcHeProp(onebyf_, onebyfTable_, TMean_);
 
 	Info<< "TMean = " << TMean_ << endl;
 	Info<< "betaHe = " << betaHe_ << endl;
@@ -339,72 +207,6 @@ Foam::HeliumModels::HeliumConst::HeliumConst
 
 
 // * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * * //
-void Foam::HeliumModels::HeliumConst::calcHeProp
-(
-    volScalarField& vsf, 
-	const List<scalar>& vsfTable,
-	const volScalarField& T
-)
-{
-	if (T_ < TMin_)
-	{
-		vsf[celli] = vsfTable[indexMin_];
-	}
-	else if (T_[celli] > TMax_.value())
-	{
-		vsf[celli] = vsfTable[indexMax_];
-	}
-	else
-	{
-		label index = (T_[celli] - TMin_.value())/dT_;
-		if (index == indexMax_)
-		{
-			vsf[celli] = vsfTable[indexMax_];
-		}
-		else
-		{
-			scalar Ti1 = TMin_.value() + index*dT_;
-			scalar Ti2 = Ti1 + dT_;
-			scalar a = (vsfTable[index + 1] - vsfTable[index])/(Ti2 - Ti1);
-			scalar b = vsfTable[index] - a*Ti1;
-			scalar value = a*T_[celli] + b;
-			vsf[celli] = value;
-		}
-	}
-
-	//forAll(vsf.boundaryField(), patchi)
-	//{
-	//	forAll(vsf.boundaryField()[patchi], facei)
-	//	{
-	//		if (T_[facei] < TMin_.value())
-	//		{
-	//			vsf.boundaryFieldRef()[patchi][facei] = vsfTable[indexMin_];
-	//		}
-	//		else if (T_[facei] > TMax_.value())
-	//		{
-	//			vsf.boundaryFieldRef()[patchi][facei] = vsfTable[indexMax_];
-	//		}
-	//		else
-	//		{
-	//			label index = (T_[facei] - TMin_.value())/dT_;
-	//			if (index == indexMax_)
-	//			{
-	//				vsf.boundaryFieldRef()[patchi][facei] = vsfTable[indexMax_];
-	//			}
-	//			else
-	//			{
-	//				scalar Ti1 = TMin_.value() + index*dT_;
-	//				scalar Ti2 = Ti1 + dT_;
-	//				scalar a = (vsfTable[index + 1] - vsfTable[index])/(Ti2 - Ti1);
-	//				scalar b = vsfTable[index] - a*Ti1;
-	//				scalar value = a*T_[facei] + b;
-	//				vsf.boundaryFieldRef()[patchi][facei] = value;
-	//			}
-	//		}
-	//	}
-	//}
-
-}
 
 void Foam::HeliumModels::HeliumConst::correct()
 {}
@@ -422,11 +224,11 @@ bool Foam::HeliumModels::HeliumConst::read
 
 	Info<< "HeliumConst updates thermal properties..." << endl;
 	nu_ = calcNu();
-	calcHeProp(betaHe_, betaHeTable_);
-	calcHeProp(AGMHe_, AGMHeTable_);
-	calcHeProp(sHe_, sHeTable_);
-	calcHeProp(cpHe_, cpHeTable_);
-	calcHeProp(onebyf_, onebyfTable_);
+	calcHeProp(betaHe_, betaHeTable_, TMean_);
+	calcHeProp(AGMHe_, AGMHeTable_, TMean_);
+	calcHeProp(sHe_, sHeTable_, TMean_);
+	calcHeProp(cpHe_, cpHeTable_, TMean_);
+	calcHeProp(onebyf_, onebyfTable_, TMean_);
 
 	Info<< "TMean = " << TMean_ << endl;
 	Info<< "betaHe = " << betaHe_ << endl;
