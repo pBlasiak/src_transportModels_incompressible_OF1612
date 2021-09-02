@@ -223,12 +223,14 @@ void Foam::HeliumModel::calcHeProp
 (
     volScalarField& vsf, 
 	const List<scalar>& vsfTable,
-	const volScalarField& T
+	const volScalarField& T,
+	const label maxIndex, 
+	const dimensionedScalar dt
 )
 {
 	const scalar TMin(TMin_.value());
 	const scalar TMax(TMax_.value());
-	const scalar dT(dT_.value());
+	const scalar dT(dt.value());
 	forAll(vsf, celli)
 	{
 		if (T[celli] < TMin)
@@ -237,14 +239,14 @@ void Foam::HeliumModel::calcHeProp
 		}
 		else if (T[celli] > TMax)
 		{
-			vsf[celli] = vsfTable[indexMax_];
+			vsf[celli] = vsfTable[maxIndex];
 		}
 		else
 		{
 			label index = (T[celli] - TMin)/dT;
-			if (index == indexMax_)
+			if (index == maxIndex)
 			{
-				vsf[celli] = vsfTable[indexMax_];
+				vsf[celli] = vsfTable[maxIndex];
 			}
 			else
 			{
@@ -252,8 +254,7 @@ void Foam::HeliumModel::calcHeProp
 				scalar Ti2 = Ti1 + dT;
 				scalar a = (vsfTable[index + 1] - vsfTable[index])/(Ti2 - Ti1);
 				scalar b = vsfTable[index] - a*Ti1;
-				scalar value = a*T[celli] + b;
-				vsf[celli] = value;
+				vsf[celli] = a*T[celli] + b;
 			}
 		}
 	}
@@ -268,14 +269,14 @@ void Foam::HeliumModel::calcHeProp
 			}
 			else if (T[facei] > TMax)
 			{
-				vsf.boundaryFieldRef()[patchi][facei] = vsfTable[indexMax_];
+				vsf.boundaryFieldRef()[patchi][facei] = vsfTable[maxIndex];
 			}
 			else
 			{
 				label index = (T[facei] - TMin)/dT;
-				if (index == indexMax_)
+				if (index == maxIndex)
 				{
-					vsf.boundaryFieldRef()[patchi][facei] = vsfTable[indexMax_];
+					vsf.boundaryFieldRef()[patchi][facei] = vsfTable[maxIndex];
 				}
 				else
 				{
@@ -283,8 +284,7 @@ void Foam::HeliumModel::calcHeProp
 					scalar Ti2 = Ti1 + dT;
 					scalar a = (vsfTable[index + 1] - vsfTable[index])/(Ti2 - Ti1);
 					scalar b = vsfTable[index] - a*Ti1;
-					scalar value = a*T[facei] + b;
-					vsf.boundaryFieldRef()[patchi][facei] = value;
+					vsf.boundaryFieldRef()[patchi][facei] = a*T[facei] + b;
 				}
 			}
 		}

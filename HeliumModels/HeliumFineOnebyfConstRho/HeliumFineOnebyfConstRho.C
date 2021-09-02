@@ -31,22 +31,22 @@ License
 
 namespace Foam
 {
-namespace viscosityModels
+namespace HeliumModels
 {
     defineTypeNameAndDebug(HeliumFineOnebyfConstRho, 0);
 
     addToRunTimeSelectionTable
     (
-        viscosityModel,
+        HeliumModel,
         HeliumFineOnebyfConstRho,
         dictionary
     );
 
 	const Foam::label
-	Foam::viscosityModels::HeliumFineOnebyfConstRho::largeIndex_(6672);
+	Foam::HeliumModels::HeliumFineOnebyfConstRho::largeIndex_(6672);
 
-	const Foam::scalar
-	Foam::viscosityModels::HeliumFineOnebyfConstRho::dTFineOnebyf_(0.0001);
+	const Foam::dimensionedScalar
+	Foam::HeliumModels::HeliumFineOnebyfConstRho::dTFineOnebyf_("dTFineOnebyf", dimTemperature, 0.0001);
 
 	#include "fineOnebyf.H"
 }
@@ -55,93 +55,93 @@ namespace viscosityModels
 
 // * * * * * * * * * * * * Private Member Functions  * * * * * * * * * * * * //
 
-void Foam::viscosityModels::HeliumFineOnebyfConstRho::fineOnebyf()
-{
-	forAll(T_, celli)
-	{
-		if (T_[celli] < TMin_.value())
-		{
-			onebyf_[celli] = fineOnebyfTable_[indexMin_];
-		}
-		else if (T_[celli] > TMax_.value())
-		{
-			onebyf_[celli] = fineOnebyfTable_[largeIndex_];
-		}
-		else
-		{
-			label index = (T_[celli] - TMin_.value())/dTFineOnebyf_;
-			if (index == largeIndex_)
-			{
-				onebyf_[celli] = fineOnebyfTable_[largeIndex_];
-			}
-			else
-			{
-				scalar Ti1 = TMin_.value() + index*dTFineOnebyf_;
-				scalar Ti2 = Ti1 + dTFineOnebyf_;
-				scalar a = (fineOnebyfTable_[index + 1] - fineOnebyfTable_[index])/(Ti2 - Ti1);
-				scalar b = fineOnebyfTable_[index] - a*Ti1;
-				onebyf_[celli] =  a*T_[celli] + b;
-			}
-		}
-	}
-
-	forAll(T_.boundaryField(), patchi)
-	{
-		forAll(T_.boundaryField()[patchi], i)
-		{
-			if (T_.boundaryField()[patchi][i] < TMin_.value())
-			{
-				onebyf_.boundaryFieldRef()[patchi][i] = fineOnebyfTable_[indexMin_];
-			}
-			else if (T_.boundaryField()[patchi][i] > TMax_.value())
-			{
-				onebyf_.boundaryFieldRef()[patchi][i] = fineOnebyfTable_[largeIndex_];
-			}
-			else
-			{
-				label index = (T_.boundaryField()[patchi][i] - TMin_.value())/dTFineOnebyf_;
-				if (index == largeIndex_)
-				{
-					onebyf_.boundaryFieldRef()[patchi][i] = fineOnebyfTable_[largeIndex_];
-				}
-				else
-				{
-					scalar Ti1 = TMin_.value() + index*dTFineOnebyf_;
-					scalar Ti2 = Ti1 + dTFineOnebyf_;
-					scalar a = (fineOnebyfTable_[index + 1] - fineOnebyfTable_[index])/(Ti2 - Ti1);
-					scalar b = fineOnebyfTable_[index] - a*Ti1;
-					onebyf_.boundaryFieldRef()[patchi][i] =  a*T_.boundaryField()[patchi][i] + b;
-				}
-			}
-		}
-	}
-}
+//void Foam::HeliumModels::HeliumFineOnebyfConstRho::fineOnebyf()
+//{
+//	forAll(T_, celli)
+//	{
+//		if (T_[celli] < TMin_.value())
+//		{
+//			onebyf_[celli] = fineOnebyfTable_[indexMin_];
+//		}
+//		else if (T_[celli] > TMax_.value())
+//		{
+//			onebyf_[celli] = fineOnebyfTable_[largeIndex_];
+//		}
+//		else
+//		{
+//			label index = (T_[celli] - TMin_.value())/dTFineOnebyf_;
+//			if (index == largeIndex_)
+//			{
+//				onebyf_[celli] = fineOnebyfTable_[largeIndex_];
+//			}
+//			else
+//			{
+//				scalar Ti1 = TMin_.value() + index*dTFineOnebyf_;
+//				scalar Ti2 = Ti1 + dTFineOnebyf_;
+//				scalar a = (fineOnebyfTable_[index + 1] - fineOnebyfTable_[index])/(Ti2 - Ti1);
+//				scalar b = fineOnebyfTable_[index] - a*Ti1;
+//				onebyf_[celli] =  a*T_[celli] + b;
+//			}
+//		}
+//	}
+//
+//	forAll(T_.boundaryField(), patchi)
+//	{
+//		forAll(T_.boundaryField()[patchi], i)
+//		{
+//			if (T_.boundaryField()[patchi][i] < TMin_.value())
+//			{
+//				onebyf_.boundaryFieldRef()[patchi][i] = fineOnebyfTable_[indexMin_];
+//			}
+//			else if (T_.boundaryField()[patchi][i] > TMax_.value())
+//			{
+//				onebyf_.boundaryFieldRef()[patchi][i] = fineOnebyfTable_[largeIndex_];
+//			}
+//			else
+//			{
+//				label index = (T_.boundaryField()[patchi][i] - TMin_.value())/dTFineOnebyf_;
+//				if (index == largeIndex_)
+//				{
+//					onebyf_.boundaryFieldRef()[patchi][i] = fineOnebyfTable_[largeIndex_];
+//				}
+//				else
+//				{
+//					scalar Ti1 = TMin_.value() + index*dTFineOnebyf_;
+//					scalar Ti2 = Ti1 + dTFineOnebyf_;
+//					scalar a = (fineOnebyfTable_[index + 1] - fineOnebyfTable_[index])/(Ti2 - Ti1);
+//					scalar b = fineOnebyfTable_[index] - a*Ti1;
+//					onebyf_.boundaryFieldRef()[patchi][i] =  a*T_.boundaryField()[patchi][i] + b;
+//				}
+//			}
+//		}
+//	}
+//}
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::viscosityModels::HeliumFineOnebyfConstRho::HeliumFineOnebyfConstRho
+Foam::HeliumModels::HeliumFineOnebyfConstRho::HeliumFineOnebyfConstRho
 (
     const word& name,
-    const dictionary& viscosityProperties,
+    const dictionary& HeliumProperties,
     const volVectorField& U,
     const surfaceScalarField& phi
 )
 :
-    HeliumConstRho(name, viscosityProperties, U, phi)
+    HeliumConstRho(name, HeliumProperties, U, phi)
 {}
 
 
 // * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * * //
 
-void Foam::viscosityModels::HeliumFineOnebyfConstRho::correct()
+void Foam::HeliumModels::HeliumFineOnebyfConstRho::correct()
 {
 	Info<< "HeliumFineOnebyfConstRho updates thermal properties..." << endl;
 	nu_ = calcNu();
-	calcHeProp(betaHe_, betaHeTable_);
-	calcHeProp(AGMHe_, AGMHeTable_);
-	calcHeProp(sHe_, sHeTable_);
-	calcHeProp(cpHe_, cpHeTable_);
-	fineOnebyf();
+	calcHeProp(betaHe_, betaHeTable_, T_);
+	calcHeProp(AGMHe_, AGMHeTable_, T_);
+	calcHeProp(sHe_, sHeTable_, T_);
+	calcHeProp(cpHe_, cpHeTable_, T_);
+	calcHeProp(onebyf_, fineOnebyfTable_, T_, largeIndex_, dTFineOnebyf_);
 }
 
 

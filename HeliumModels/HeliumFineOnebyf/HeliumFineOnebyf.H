@@ -22,7 +22,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::viscosityModels::HeliumFineOnebyf
+    Foam::HeliumModels::HeliumFineOnebyf
 
 Description
      Helium II model with thermophysical properties dependent on temperature.
@@ -36,7 +36,7 @@ SourceFiles
 #ifndef HeliumFineOnebyf_H
 #define HeliumFineOnebyf_H
 
-#include "viscosityModel.H"
+#include "HeliumModel.H"
 #include "dimensionedScalar.H"
 #include "volFields.H"
 #include "Helium.H"
@@ -45,7 +45,7 @@ SourceFiles
 
 namespace Foam
 {
-namespace viscosityModels
+namespace HeliumModels
 {
 
 /*---------------------------------------------------------------------------*\
@@ -69,9 +69,6 @@ class HeliumFineOnebyf
 
     // Private Member Functions
 
-		//- Calculates helium 1/f function based on temperature
-        void fineOnebyf();
-
 
 public:
 
@@ -85,7 +82,7 @@ public:
         HeliumFineOnebyf
         (
             const word& name,
-            const dictionary& viscosityProperties,
+            const dictionary& HeliumProperties,
             const volVectorField& U,
             const surfaceScalarField& phi
         );
@@ -98,7 +95,7 @@ public:
 
     // Member Functions
 
-        //- Correct the laminar viscosity and thermal properties of He
+        //- Correct the laminar Helium and thermal properties of He
         virtual void correct() override;
 
 };
@@ -106,7 +103,7 @@ public:
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-} // End namespace viscosityModels
+} // End namespace HeliumModels
 } // End namespace Foam
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

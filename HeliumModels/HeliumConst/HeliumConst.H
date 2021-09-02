@@ -63,8 +63,6 @@ protected:
 
         dictionary HeliumConstCoeffs_;
 
-        const volScalarField& T_;
-
 		dimensionedScalar TMean0_;
 
 		volScalarField TMean_;

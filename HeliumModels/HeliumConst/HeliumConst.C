@@ -63,101 +63,6 @@ Foam::HeliumModels::HeliumConst::calcNu()
 	);
 }
 
-//void Foam::HeliumModels::HeliumConst::calcHeProp
-//(
-//	Foam::volScalarField& vsf,
-//	const List<scalar>& vsfTable
-//)
-//{
-//	if (TMean_ < TMin_)
-//	{
-//		forAll(vsf, celli)
-//		{
-//			vsf[celli] = vsfTable[indexMin_];
-//		}
-//	}
-//	else if (TMean_ > TMax_)
-//	{
-//		forAll(vsf, celli)
-//		{
-//			vsf[celli] = vsfTable[indexMax_];
-//		}
-//	}
-//	else
-//	{
-//		label index = (TMean_.value() - TMin_.value())/dT_;
-//		if (index == indexMax_)
-//		{
-//			forAll(vsf, celli)
-//			{
-//				vsf[celli] = vsfTable[indexMax_];
-//			}
-//		}
-//		else
-//		{
-//			scalar Ti1 = TMin_.value() + index*dT_;
-//			scalar Ti2 = Ti1 + dT_;
-//			scalar a = (vsfTable[index + 1] - vsfTable[index])/(Ti2 - Ti1);
-//			scalar b = vsfTable[index] - a*Ti1;
-//			scalar value = a*TMean_.value() + b;
-//			forAll(vsf, celli)
-//			{
-//				vsf[celli] = value;
-//			}
-//		}
-//	}
-//
-//
-//	if (TMean_ < TMin_)
-//	{
-//		forAll(vsf.boundaryField(), patchi)
-//		{
-//			forAll(vsf.boundaryField()[patchi], i)
-//			{
-//				vsf.boundaryFieldRef()[patchi][i] = vsfTable[indexMin_];
-//			}
-//		}
-//	}
-//	else if (TMean_ > TMax_)
-//	{
-//		forAll(vsf.boundaryField(), patchi)
-//		{
-//			forAll(vsf.boundaryField()[patchi], i)
-//			{
-//				vsf.boundaryFieldRef()[patchi][i] = vsfTable[indexMax_];
-//			}
-//		}
-//	}
-//	else
-//	{
-//		label index = (TMean_.value() - TMin_.value())/dT_;
-//		if (index == indexMax_)
-//		{
-//			forAll(vsf.boundaryField(), patchi)
-//			{
-//				forAll(vsf.boundaryField()[patchi], i)
-//				{
-//					vsf.boundaryFieldRef()[patchi][i] = vsfTable[indexMax_];
-//				}
-//			}
-//		}
-//		else
-//		{
-//			scalar Ti1 = TMin_.value() + index*dT_;
-//			scalar Ti2 = Ti1 + dT_;
-//			scalar a = (vsfTable[index + 1] - vsfTable[index])/(Ti2 - Ti1);
-//			scalar b = vsfTable[index] - a*Ti1;
-//			scalar value = a*TMean_.value() + b;
-//			forAll(vsf.boundaryField(), patchi)
-//			{
-//				forAll(vsf.boundaryField()[patchi], i)
-//				{
-//					vsf.boundaryFieldRef()[patchi][i] = value;
-//				}
-//			}
-//		}
-//	}
-//}
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
@@ -171,7 +76,6 @@ Foam::HeliumModels::HeliumConst::HeliumConst
 :
     HeliumModel(name, HeliumProperties, U, phi),
     HeliumConstCoeffs_(HeliumProperties.subDict(typeName + "Coeffs")),
-	T_(U.db().lookupObject<volScalarField>("T")),
     TMean0_("TMean", dimTemperature, HeliumConstCoeffs_),
 	TMean_
     (

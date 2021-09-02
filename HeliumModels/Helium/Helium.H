@@ -38,7 +38,6 @@ SourceFiles
 #include "HeliumModel.H"
 #include "dimensionedScalar.H"
 #include "volFields.H"
-#include "HeliumConst.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -53,13 +52,14 @@ namespace HeliumModels
 
 class Helium
 :
-    public HeliumConst
+    public HeliumModel
 {
     // Protected data
 protected:
 
-        //dictionary HeliumCoeffs_;
+        dictionary HeliumCoeffs_;
 
+        const volScalarField& T_;
 
         dimensionedScalar nuMin_;
         dimensionedScalar nuMax_;
@@ -101,7 +101,7 @@ public:
         virtual void correct() override;
 
         //- Read transportProperties dictionary
-//        virtual bool read(const dictionary& HeliumProperties) override;
+        virtual bool read(const dictionary& HeliumProperties) override;
 };
 
 

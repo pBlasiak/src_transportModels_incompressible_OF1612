@@ -41,13 +41,14 @@ SourceFiles
 #include "transportModel.H"
 #include "IOdictionary.H"
 #include "autoPtr.H"
+#include "HeliumModel.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 namespace Foam
 {
 
-class HeliumModel;
+//class HeliumModel;
 
 /*---------------------------------------------------------------------------*\
                 Class singlePhaseHeliumTransportModel Declaration
@@ -67,8 +68,8 @@ class singlePhaseHeliumTransportModel
         //- Disallow default bitwise assignment
         void operator=(const singlePhaseHeliumTransportModel&);
 
-private:		
-    // Private Data
+protected:		
+    // Protected Data
 
         autoPtr<HeliumModel> HeliumModelPtr_;
 

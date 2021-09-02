@@ -5,7 +5,7 @@
  the dimension of the array is 6672
 */
 const Foam::List<Foam::scalar> 
-Foam::viscosityModels::HeliumFineOnebyf::fineOnebyfTable_
+Foam::HeliumModels::HeliumFineOnebyf::fineOnebyfTable_
 (
 	IStringStream
 	(

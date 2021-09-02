@@ -22,7 +22,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::viscosityModels::HeliumFineOnebyfConstRho
+    Foam::HeliumModels::HeliumFineOnebyfConstRho
 
 Description
      Helium II model with thermophysical properties dependent on temperature.
@@ -37,7 +37,7 @@ SourceFiles
 #ifndef HeliumFineOnebyfConstRho_H
 #define HeliumFineOnebyfConstRho_H
 
-#include "viscosityModel.H"
+#include "HeliumModel.H"
 #include "dimensionedScalar.H"
 #include "volFields.H"
 #include "HeliumConstRho.H"
@@ -46,7 +46,7 @@ SourceFiles
 
 namespace Foam
 {
-namespace viscosityModels
+namespace HeliumModels
 {
 
 /*---------------------------------------------------------------------------*\
@@ -62,7 +62,7 @@ class HeliumFineOnebyfConstRho
 		static const label largeIndex_;
 
 		//- Step of temperature in the thermophysical tables dT = 0.0001 K
-		static const scalar dTFineOnebyf_;
+		static const dimensionedScalar dTFineOnebyf_;
 
 		//- Table for betaHe
 		static const List<scalar> fineOnebyfTable_;
@@ -70,8 +70,6 @@ class HeliumFineOnebyfConstRho
 
     // Private Member Functions
 
-		//- Calculates helium 1/f function based on temperature
-        void fineOnebyf();
 
 
 public:
@@ -86,7 +84,7 @@ public:
         HeliumFineOnebyfConstRho
         (
             const word& name,
-            const dictionary& viscosityProperties,
+            const dictionary& HeliumProperties,
             const volVectorField& U,
             const surfaceScalarField& phi
         );
@@ -99,7 +97,7 @@ public:
 
     // Member Functions
 
-        //- Correct the laminar viscosity and thermal properties of He
+        //- Correct the laminar Helium and thermal properties of He
         virtual void correct() override;
 
 };
@@ -107,7 +105,7 @@ public:
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-} // End namespace viscosityModels
+} // End namespace HeliumModels
 } // End namespace Foam
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

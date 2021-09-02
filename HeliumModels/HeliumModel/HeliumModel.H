@@ -61,15 +61,16 @@ namespace Foam
 class HeliumModel
 {
     // Private data
+
+protected:
+
+    // Protected data
+	
 		//- Maximum index number for thermophysical tables i = 667
 		static const label indexMax_;
 
 		//- Step of temperature in the thermophysical tables dT = 0.001 K
 		static const dimensionedScalar dT_;
-
-protected:
-
-    // Protected data
 	
 		//- lambda Temperature 2.1711132461
 		static const dimensionedScalar Tlambda_;
@@ -142,7 +143,9 @@ protected:
 		(
 		    volScalarField& vsf, 
 			const List<scalar>& vsfTable,
-			const volScalarField& T
+			const volScalarField& T,
+			const label maxIndex = indexMax_,
+			const dimensionedScalar dt = dT_
 		);
 
     // Private Member Functions

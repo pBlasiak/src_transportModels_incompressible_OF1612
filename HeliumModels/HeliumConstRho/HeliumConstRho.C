@@ -31,13 +31,13 @@ License
 
 namespace Foam
 {
-namespace viscosityModels
+namespace HeliumModels
 {
     defineTypeNameAndDebug(HeliumConstRho, 0);
 
     addToRunTimeSelectionTable
     (
-        viscosityModel,
+        HeliumModel,
         HeliumConstRho,
         dictionary
     );
@@ -48,9 +48,9 @@ namespace viscosityModels
 // * * * * * * * * * * * * Private Member Functions  * * * * * * * * * * * * //
 
 Foam::tmp<Foam::volScalarField>
-Foam::viscosityModels::HeliumConstRho::calcNu() 
+Foam::HeliumModels::HeliumConstRho::calcNu() 
 {
-	calcHeProp(etaHe_, etaHeTable_);
+	calcHeProp(etaHe_, etaHeTable_, T_);
 
     volScalarField nu
     (
@@ -76,87 +76,20 @@ Foam::viscosityModels::HeliumConstRho::calcNu()
     );
 }
 
-void Foam::viscosityModels::HeliumConstRho::calcHeProp
-(
-	Foam::volScalarField& vsf,
-	const List<scalar>& vsfTable
-)
-{
-	forAll(vsf, celli)
-	{
-		if (T_[celli] < TMin_.value())
-		{
-			vsf[celli] = vsfTable[indexMin_];
-		}
-		else if (T_[celli] > TMax_.value())
-		{
-			vsf[celli] = vsfTable[indexMax_];
-		}
-		else
-		{
-			label index = (T_[celli] - TMin_.value())/dT_;
-			if (index == indexMax_)
-			{
-				vsf[celli] = vsfTable[indexMax_];
-			}
-			else
-			{
-				scalar Ti1 = TMin_.value() + index*dT_;
-				scalar Ti2 = Ti1 + dT_;
-				scalar a = (vsfTable[index + 1] - vsfTable[index])/(Ti2 - Ti1);
-				scalar b = vsfTable[index] - a*Ti1;
-				scalar value = a*T_[celli] + b;
-				vsf[celli] = value;
-			}
-		}
-	}
-
-	forAll(vsf.boundaryField(), patchi)
-	{
-		forAll(vsf.boundaryField()[patchi], facei)
-		{
-			if (T_[facei] < TMin_.value())
-			{
-				vsf.boundaryFieldRef()[patchi][facei] = vsfTable[indexMin_];
-			}
-			else if (T_[facei] > TMax_.value())
-			{
-				vsf.boundaryFieldRef()[patchi][facei] = vsfTable[indexMax_];
-			}
-			else
-			{
-				label index = (T_[facei] - TMin_.value())/dT_;
-				if (index == indexMax_)
-				{
-					vsf.boundaryFieldRef()[patchi][facei] = vsfTable[indexMax_];
-				}
-				else
-				{
-					scalar Ti1 = TMin_.value() + index*dT_;
-					scalar Ti2 = Ti1 + dT_;
-					scalar a = (vsfTable[index + 1] - vsfTable[index])/(Ti2 - Ti1);
-					scalar b = vsfTable[index] - a*Ti1;
-					scalar value = a*T_[facei] + b;
-					vsf.boundaryFieldRef()[patchi][facei] = value;
-				}
-			}
-		}
-	}
-}
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::viscosityModels::HeliumConstRho::HeliumConstRho
+Foam::HeliumModels::HeliumConstRho::HeliumConstRho
 (
     const word& name,
-    const dictionary& viscosityProperties,
+    const dictionary& HeliumProperties,
     const volVectorField& U,
     const surfaceScalarField& phi
 )
 :
-    HeliumConst(name, viscosityProperties, U, phi),
-//    HeliumConstRhoCoeffs_(viscosityProperties.subDict(typeName + "Coeffs")),
-	T_(U_.db().lookupObject<volScalarField>("T")),
+    HeliumConst(name, HeliumProperties, U, phi),
+//    HeliumConstRhoCoeffs_(HeliumProperties.subDict(typeName + "Coeffs")),
+	T_(U.db().lookupObject<volScalarField>("T")),
     nuMin_("nuMin", dimViscosity, etaHeTable_[indexMin_]/rhoHe_[0]),
     nuMax_("nuMax", dimViscosity, etaHeTable_[indexMax_]/rhoHe_[0])
 {
@@ -166,25 +99,25 @@ Foam::viscosityModels::HeliumConstRho::HeliumConstRho
 
 // * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * * //
 
-void Foam::viscosityModels::HeliumConstRho::correct()
+void Foam::HeliumModels::HeliumConstRho::correct()
 {
 	Info<< "HeliumConstRho updates thermal properties..." << endl;
 	nu_ = calcNu();
-	calcHeProp(betaHe_, betaHeTable_);
-	calcHeProp(AGMHe_, AGMHeTable_);
-	calcHeProp(sHe_, sHeTable_);
-	calcHeProp(cpHe_, cpHeTable_);
-	calcHeProp(onebyf_, onebyfTable_);
+	calcHeProp(betaHe_, betaHeTable_, T_);
+	calcHeProp(AGMHe_, AGMHeTable_, T_);
+	calcHeProp(sHe_, sHeTable_, T_);
+	calcHeProp(cpHe_, cpHeTable_, T_);
+	calcHeProp(onebyf_, onebyfTable_, T_);
 }
 
-//bool Foam::viscosityModels::HeliumConstRho::read
+//bool Foam::HeliumModels::HeliumConstRho::read
 //(
-//    const dictionary& viscosityProperties
+//    const dictionary& HeliumProperties
 //)
 //{
-//    viscosityModel::read(viscosityProperties);
+//    HeliumModel::read(HeliumProperties);
 //
-////    HeliumConstRhoCoeffs_ = viscosityProperties.subDict(typeName + "Coeffs");
+////    HeliumConstRhoCoeffs_ = HeliumProperties.subDict(typeName + "Coeffs");
 //
 //    //HeliumCoeffs_.lookup("rhoHe") >> rhoHe_;
 //

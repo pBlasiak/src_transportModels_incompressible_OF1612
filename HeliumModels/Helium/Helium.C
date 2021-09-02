@@ -51,8 +51,8 @@ Foam::tmp<Foam::volScalarField>
 Foam::HeliumModels::Helium::calcNu() 
 {
 	Info<< "Jestem w calcNu() w Helium. " << endl;
-	calcHeProp(etaHe_, etaHeTable_);
-	calcHeProp(rhoHe_, rhoHeTable_);
+	calcHeProp(etaHe_, etaHeTable_, T_);
+	calcHeProp(rhoHe_, rhoHeTable_, T_);
 
     volScalarField nu
     (
@@ -78,73 +78,6 @@ Foam::HeliumModels::Helium::calcNu()
     );
 }
 
-void Foam::HeliumModels::Helium::calcHeProp
-(
-	Foam::volScalarField& vsf,
-	const List<scalar>& vsfTable
-)
-{
-	forAll(vsf, celli)
-	{
-		if (T_[celli] < TMin_.value())
-		{
-			vsf[celli] = vsfTable[indexMin_];
-		}
-		else if (T_[celli] > TMax_.value())
-		{
-			vsf[celli] = vsfTable[indexMax_];
-		}
-		else
-		{
-			label index = (T_[celli] - TMin_.value())/dT_;
-			if (index == indexMax_)
-			{
-				vsf[celli] = vsfTable[indexMax_];
-			}
-			else
-			{
-				scalar Ti1 = TMin_.value() + index*dT_;
-				scalar Ti2 = Ti1 + dT_;
-				scalar a = (vsfTable[index + 1] - vsfTable[index])/(Ti2 - Ti1);
-				scalar b = vsfTable[index] - a*Ti1;
-				scalar value = a*T_[celli] + b;
-				vsf[celli] = value;
-			}
-		}
-	}
-
-	forAll(vsf.boundaryField(), patchi)
-	{
-		forAll(vsf.boundaryField()[patchi], facei)
-		{
-			if (T_[facei] < TMin_.value())
-			{
-				vsf.boundaryFieldRef()[patchi][facei] = vsfTable[indexMin_];
-			}
-			else if (T_[facei] > TMax_.value())
-			{
-				vsf.boundaryFieldRef()[patchi][facei] = vsfTable[indexMax_];
-			}
-			else
-			{
-				label index = (T_[facei] - TMin_.value())/dT_;
-				if (index == indexMax_)
-				{
-					vsf.boundaryFieldRef()[patchi][facei] = vsfTable[indexMax_];
-				}
-				else
-				{
-					scalar Ti1 = TMin_.value() + index*dT_;
-					scalar Ti2 = Ti1 + dT_;
-					scalar a = (vsfTable[index + 1] - vsfTable[index])/(Ti2 - Ti1);
-					scalar b = vsfTable[index] - a*Ti1;
-					scalar value = a*T_[facei] + b;
-					vsf.boundaryFieldRef()[patchi][facei] = value;
-				}
-			}
-		}
-	}
-}
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
@@ -156,9 +89,9 @@ Foam::HeliumModels::Helium::Helium
     const surfaceScalarField& phi
 )
 :
-    HeliumConst(name, HeliumProperties, U, phi),
-    //HeliumCoeffs_(HeliumProperties.subDict(typeName + "Coeffs")),
-	T_(U_.db().lookupObject<volScalarField>("T")),
+    HeliumModel(name, HeliumProperties, U, phi),
+    HeliumCoeffs_(HeliumProperties.subDict(typeName + "Coeffs")),
+	T_(U.db().lookupObject<volScalarField>("T")),
     nuMin_("nuMin", dimViscosity, etaHeTable_[indexMin_]/rhoHeTable_[indexMin_]),
     nuMax_("nuMax", dimViscosity, etaHeTable_[indexMax_]/rhoHeTable_[indexMax_])
 {
@@ -172,26 +105,26 @@ void Foam::HeliumModels::Helium::correct()
 {
 	Info<< "Helium updates thermal properties..." << endl;
 	nu_ = calcNu();
-	calcHeProp(betaHe_, betaHeTable_);
-	calcHeProp(AGMHe_, AGMHeTable_);
-	calcHeProp(sHe_, sHeTable_);
-	calcHeProp(cpHe_, cpHeTable_);
-	calcHeProp(onebyf_, onebyfTable_);
+	calcHeProp(betaHe_, betaHeTable_, T_);
+	calcHeProp(AGMHe_, AGMHeTable_, T_);
+	calcHeProp(sHe_, sHeTable_, T_);
+	calcHeProp(cpHe_, cpHeTable_, T_);
+	calcHeProp(onebyf_, onebyfTable_, T_);
 }
 
-//bool Foam::HeliumModels::Helium::read
-//(
-//    const dictionary& HeliumProperties
-//)
-//{
-//    HeliumModel::read(HeliumProperties);
-//
-//    //HeliumCoeffs_ = HeliumProperties.subDict(typeName + "Coeffs");
-//
-//    //HeliumCoeffs_.lookup("rhoHe") >> rhoHe_;
-//
-//    return true;
-//}
+bool Foam::HeliumModels::Helium::read
+(
+    const dictionary& HeliumProperties
+)
+{
+    HeliumModel::read(HeliumProperties);
+
+    //HeliumCoeffs_ = HeliumProperties.subDict(typeName + "Coeffs");
+
+    //HeliumCoeffs_.lookup("rhoHe") >> rhoHe_;
+
+    return true;
+}
 
 
 // ************************************************************************* //
